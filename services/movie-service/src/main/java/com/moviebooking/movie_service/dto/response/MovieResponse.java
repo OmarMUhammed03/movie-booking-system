@@ -1,4 +1,4 @@
-package com.moviebooking.movie_service.response;
+package com.moviebooking.movie_service.dto.response;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

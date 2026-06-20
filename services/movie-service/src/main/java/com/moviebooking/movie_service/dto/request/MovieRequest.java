@@ -1,4 +1,4 @@
-package com.moviebooking.movie_service.request;
+package com.moviebooking.movie_service.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
