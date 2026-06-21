@@ -25,6 +25,11 @@ public class Movie {
     @Column(length = 1000)
     private String posterUrl;
     private LocalDate releaseDate;
-    @CreationTimestamp
+    //    @CreationTimestamp
     private LocalDateTime createdAt;
+
+    @PrePersist
+    public void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }
