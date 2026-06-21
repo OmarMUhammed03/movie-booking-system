@@ -3,6 +3,8 @@ package com.moviebooking.movie_service.controller;
 import com.moviebooking.movie_service.dto.request.MovieRequest;
 import com.moviebooking.movie_service.dto.response.MovieResponse;
 import com.moviebooking.movie_service.service.MovieService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,12 +18,14 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/movies")
 @RequiredArgsConstructor
+@Tag(name = "Movie Controller", description = "APIs for managing movie catalog records")
 public class MovieController {
 
     private final MovieService movieService;
 
     // TODO: @PreAuthorize("hasRole('ADMIN')") Security layer
     @PostMapping
+    @Operation(summary = "Create a new movie", description = "Adds a new movie to the catalog system. Restricted to administrators.")
     public ResponseEntity<MovieResponse> createMovie(@Valid @RequestBody MovieRequest request) {
         MovieResponse response = movieService.createMovie(request);
         URI location = URI.create("/api/movies/" + response.id());
@@ -29,17 +33,20 @@ public class MovieController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get movie details by ID", description = "Retrieves complete metadata for a specific movie using its unique UUID.")
     public ResponseEntity<MovieResponse> getMovieById(@PathVariable UUID id) {
         return ResponseEntity.ok(movieService.getMovieById(id));
     }
 
     @GetMapping
+    @Operation(summary = "Get all movies", description = "Fetches a comprehensive list of all movies available in the database.")
     public ResponseEntity<List<MovieResponse>> getAllMovies() {
         return ResponseEntity.ok(movieService.getAllMovies());
     }
 
     // TODO: @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
+    @Operation(summary = "Update an existing movie", description = "Updates the fields of an existing movie record found by its UUID.")
     public ResponseEntity<MovieResponse> updateMovie(
             @PathVariable UUID id,
             @Valid @RequestBody MovieRequest request) {
@@ -48,6 +55,7 @@ public class MovieController {
 
     // TODO: @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete a movie record", description = "Permanently removes a movie from the database configuration using its ID.")
     public ResponseEntity<Void> deleteMovie(@PathVariable UUID id) {
         movieService.deleteMovie(id);
         return ResponseEntity.noContent().build();
