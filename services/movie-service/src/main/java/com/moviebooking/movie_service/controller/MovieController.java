@@ -7,6 +7,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,9 +43,9 @@ public class MovieController {
     }
 
     @GetMapping
-    @Operation(summary = "Get all movies", description = "Fetches a comprehensive list of all movies available in the database.")
-    public ResponseEntity<List<MovieResponse>> getAllMovies() {
-        return ResponseEntity.ok(movieService.getAllMovies());
+    @Operation(summary = "Get paginated movies", description = "Fetches a paginated and sorted list of movies available in the database.")    public ResponseEntity<Page<MovieResponse>> getAllMovies(
+            @PageableDefault(page = 0, size = 10) Pageable pageable) {
+        return ResponseEntity.ok(movieService.getAllMovies(pageable));
     }
 
     // TODO: @PreAuthorize("hasRole('ADMIN')")
