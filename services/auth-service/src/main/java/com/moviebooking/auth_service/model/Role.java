@@ -1,0 +1,5 @@
+package com.moviebooking.auth_service.model;
+
+public enum Role {
+    ADMIN, CUSTOMER
+}
