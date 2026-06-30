@@ -13,6 +13,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -27,7 +29,7 @@ public class MovieController {
 
     private final MovieService movieService;
 
-    // TODO: @PreAuthorize("hasRole('ADMIN')") Security layer
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @Operation(summary = "Create a new movie", description = "Adds a new movie to the catalog system. Restricted to administrators.")
     public ResponseEntity<MovieResponse> createMovie(@Valid @RequestBody MovieRequest request) {
@@ -48,7 +50,7 @@ public class MovieController {
         return ResponseEntity.ok(movieService.getAllMovies(pageable));
     }
 
-    // TODO: @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     @Operation(summary = "Update an existing movie", description = "Updates the fields of an existing movie record found by its UUID.")
     public ResponseEntity<MovieResponse> updateMovie(
@@ -57,7 +59,7 @@ public class MovieController {
         return ResponseEntity.ok(movieService.updateMovie(id, request));
     }
 
-    // TODO: @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a movie record", description = "Permanently removes a movie from the database configuration using its ID.")
     public ResponseEntity<Void> deleteMovie(@PathVariable UUID id) {

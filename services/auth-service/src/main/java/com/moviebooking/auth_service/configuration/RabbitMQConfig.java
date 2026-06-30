@@ -1,4 +1,4 @@
-package com.moviebooking.auth_service.config;
+package com.moviebooking.auth_service.configuration;
 
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;

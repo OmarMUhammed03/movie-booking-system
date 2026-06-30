@@ -1,5 +1,7 @@
 # Compiled class file
 *.class
+#mvn
+target/
 
 # Log file
 *.log

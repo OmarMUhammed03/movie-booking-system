@@ -1,0 +1,35 @@
+package com.moviebooking.auth_service.model;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.Instant;
+import java.util.UUID;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Builder
+public class RefreashToken {
+    @Id
+    @GeneratedValue
+    UUID id;
+
+    @Column(nullable = false, unique = true)
+    private String tokenHash;
+
+    @Column(nullable = false, updatable = false)
+    private Instant createdAt;
+
+    @Column(nullable = false)
+    private Instant expiresAt;
+
+    @Column
+    private boolean revoked;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private AuthUser user;
+}
