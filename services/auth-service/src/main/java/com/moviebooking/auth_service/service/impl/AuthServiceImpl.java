@@ -104,6 +104,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private void persistRefreshToken(String refreshToken, AuthUser user) {
+        log.info("Persisting refresh token");
         Instant now = Instant.now();
         tokenRepository.save(
                 RefreashToken.builder()

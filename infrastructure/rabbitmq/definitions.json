@@ -1,0 +1,57 @@
+{
+  "rabbit_version": "4.0.0",
+  "users": [
+    {
+      "name": "guest",
+      "password_hash": "BM8X6pB8X6pB8X6pB8X6pB8X6pB8X6pB8X6pB8X6pB8=",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": [
+        "administrator"
+      ]
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "/"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "guest",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "user.events",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "queues": [
+    {
+      "name": "user.registration.queue",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "source": "user.events",
+      "vhost": "/",
+      "destination": "user.registration.queue",
+      "destination_type": "queue",
+      "routing_key": "user.registered",
+      "arguments": {}
+    }
+  ]
+}

@@ -8,6 +8,8 @@ import com.moviebooking.movie_service.model.Movie;
 import com.moviebooking.movie_service.repository.MovieRepository;
 import com.moviebooking.movie_service.service.MovieService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,12 +39,18 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<MovieResponse> getAllMovies() {
-        return movieRepository.findAll()
-                .stream()
-                .map(movieMapper::toResponse)
-                .toList();
+    public Page<MovieResponse> getAllMovies(Pageable pageable) {
+        return movieRepository.findAll(pageable)
+                .map(movieMapper::toResponse);
     }
+
+//    @Override
+//    public List<MovieResponse> getAllMovies() {
+//        return movieRepository.findAll()
+//                .stream()
+//                .map(movieMapper::toResponse)
+//                .toList();
+//    }
 
     @Override
     @Transactional

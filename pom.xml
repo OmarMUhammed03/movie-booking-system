@@ -16,12 +16,12 @@
         <module>shared-security</module>
 
         <module>services/auth-service</module>
+        <module>services/user-service</module>
         <module>services/movie-service</module>
         <module>services/show-service</module>
         <module>services/reservation-service</module>
         <module>services/payment-service</module>
     </modules>
-
     <properties>
         <java.version>21</java.version>
         <spring-boot.version>3.5.3</spring-boot.version>

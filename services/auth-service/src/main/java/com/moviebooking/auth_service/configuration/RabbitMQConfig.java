@@ -1,0 +1,22 @@
+package com.moviebooking.auth_service.configuration;
+
+import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class RabbitMQConfig {
+
+    public static final String USER_EVENTS_EXCHANGE = "user.events";
+
+    @Bean
+    public TopicExchange userEventsExchange() {
+        return new TopicExchange(USER_EVENTS_EXCHANGE);
+    }
+
+    @Bean
+    public Jackson2JsonMessageConverter messageConverter() {
+        return new Jackson2JsonMessageConverter();
+    }
+}
