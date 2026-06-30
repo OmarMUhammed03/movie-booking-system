@@ -2,6 +2,7 @@ package com.moviebooking;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
@@ -23,6 +24,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 @AutoConfiguration
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class JwtSecurityAutoConfig {
+
+
+    @Bean
+    @ConditionalOnClass(feign.RequestInterceptor.class) // Only load if Feign is in the project
+    @ConditionalOnMissingBean
+    public FeignJwtInterceptor feignJwtInterceptor() {
+        return new FeignJwtInterceptor();
+    }
+
 
     @Bean
     @ConditionalOnMissingBean(SecurityFilterChain.class)
