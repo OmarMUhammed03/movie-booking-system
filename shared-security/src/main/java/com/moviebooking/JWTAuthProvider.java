@@ -30,8 +30,11 @@ public class JWTAuthProvider implements AuthenticationProvider {
         String email = jwtService.getUsernameFromToken(token);
 
         List<GrantedAuthority> roles = jwtService.getAuthorities(token);
+        List<SimpleGrantedAuthority> authorities = roles.stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role)) // Add ROLE_ prefix
+                .toList();
 
-        return new JWTAuthToken(token, email, roles);
+        return new JWTAuthToken(token, email, authorities);
     }
 
     @Override
