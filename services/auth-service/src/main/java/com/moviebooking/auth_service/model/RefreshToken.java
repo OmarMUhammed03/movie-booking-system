@@ -12,7 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 @Builder
-public class RefreashToken {
+public class RefreshToken {
     @Id
     @GeneratedValue
     UUID id;

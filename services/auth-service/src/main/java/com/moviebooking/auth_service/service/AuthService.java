@@ -12,5 +12,6 @@ public interface AuthService {
 
     AuthResponse refresh(String refreshToken);
 
-    void Register(SignUpRequest user);
+    void creatUser(SignUpRequest user);
+
 }

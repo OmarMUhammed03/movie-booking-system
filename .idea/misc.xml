@@ -9,6 +9,8 @@
         <option value="$PROJECT_DIR$/services/movie-service/pom.xml" />
         <option value="$PROJECT_DIR$/shared-lib/pom.xml" />
         <option value="$PROJECT_DIR$/services/auth-service/pom.xml" />
+        <option value="$PROJECT_DIR$/shared-security/pom.xml" />
+        <option value="$PROJECT_DIR$/services/user-service/pom.xml" />
       </list>
     </option>
   </component>

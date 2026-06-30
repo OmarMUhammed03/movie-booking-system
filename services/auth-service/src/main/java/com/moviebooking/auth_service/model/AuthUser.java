@@ -33,7 +33,7 @@ public class AuthUser implements UserDetails {
     private Role role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    Set<RefreashToken> tokens ;
+    Set<RefreshToken> tokens ;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
