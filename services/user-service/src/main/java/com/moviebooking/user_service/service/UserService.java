@@ -78,7 +78,8 @@ public class UserService {
         }
 
         User user = User.builder()
-                .authUserId(event.getAuthUserId())
+                .authUserId(event.getAuthUserId()).firstName(event.getFirstName())
+                .lastName(event.getLastName()).phone(event.getPhone())
                 .build();
 
         userRepository.save(user);

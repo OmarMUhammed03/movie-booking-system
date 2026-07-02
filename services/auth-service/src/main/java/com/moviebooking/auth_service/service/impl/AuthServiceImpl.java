@@ -118,7 +118,6 @@ public class AuthServiceImpl implements AuthService {
         log.info("Creating user with email: {}", request.getEmail());
         AuthUser user = userMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setId(UUID.randomUUID());
         authUserRepository.save(user);
         messagingService.sendCreatUserEvent(
                 UserRegisteredEvent.builder()

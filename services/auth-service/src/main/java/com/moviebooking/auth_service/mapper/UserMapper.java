@@ -2,10 +2,16 @@ package com.moviebooking.auth_service.mapper;
 
 import com.moviebooking.auth_service.dto.SignUpRequest;
 import com.moviebooking.auth_service.model.AuthUser;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring")
-public interface UserMapper {
-    AuthUser toEntity(SignUpRequest user);
+@Component
+public class UserMapper {
+    public AuthUser toEntity(SignUpRequest user){
+        if(user == null) return null;
+        AuthUser authUser = new AuthUser();
+        authUser.setEmail(user.getEmail());
+        authUser.setPassword(user.getPassword());
+        authUser.setRole(user.getRole());
+        return authUser;
+    }
 }
