@@ -20,7 +20,10 @@ target/
 *.zip
 *.tar.gz
 *.rar
-.idea/discord.xml
+
+# IntelliJ IDEA
+.idea/
+
 target
 */target
 */*/target
