@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -22,7 +23,7 @@ public class TicketController {
 
     private final TicketService ticketService;
 
-    // TODO: @PreAuthorize("hasRole('ADMIN')") Security layer
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @Operation(summary = "Create a new ticket", description = "Generates a new ticket for a seat in a show. Restricted to administrators.")
     public ResponseEntity<TicketResponse> createTicket(@Valid @RequestBody TicketRequest request) {
@@ -43,7 +44,7 @@ public class TicketController {
         return ResponseEntity.ok(ticketService.getAllTickets());
     }
 
-    // TODO: @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     @Operation(summary = "Update an existing ticket", description = "Updates the fields of an existing ticket record found by its UUID.")
     public ResponseEntity<TicketResponse> updateTicket(
@@ -52,7 +53,7 @@ public class TicketController {
         return ResponseEntity.ok(ticketService.updateTicket(id, request));
     }
 
-    // TODO: @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a ticket record", description = "Permanently removes a ticket from the database using its ID.")
     public ResponseEntity<Void> deleteTicket(@PathVariable UUID id) {

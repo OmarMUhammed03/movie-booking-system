@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -22,7 +23,7 @@ public class HallController {
 
     private final HallService hallService;
 
-    // TODO: @PreAuthorize("hasRole('ADMIN')") Security layer
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @Operation(summary = "Create a new hall", description = "Adds a new cinema hall to the system. Restricted to administrators.")
     public ResponseEntity<HallResponse> createHall(@Valid @RequestBody HallRequest request) {
@@ -43,7 +44,7 @@ public class HallController {
         return ResponseEntity.ok(hallService.getAllHalls());
     }
 
-    // TODO: @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     @Operation(summary = "Update an existing hall", description = "Updates the fields of an existing hall record found by its UUID.")
     public ResponseEntity<HallResponse> updateHall(
@@ -52,7 +53,7 @@ public class HallController {
         return ResponseEntity.ok(hallService.updateHall(id, request));
     }
 
-    // TODO: @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a hall record", description = "Permanently removes a hall from the database using its ID.")
     public ResponseEntity<Void> deleteHall(@PathVariable UUID id) {

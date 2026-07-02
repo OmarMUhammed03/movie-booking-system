@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="56cbb5fc-fcf3-47dd-9b1b-040eea1368dd" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_D:/ITI/JAVA/00-Project4/movie-booking-system" value="3FafX8wkr12gjq2TYYUoGIwnL22" />
+    </persistenceIdMap>
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="110" />
+    <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;eslammagdy101&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/OmarMUhammed03/movie-booking-system.git&quot;,
+    &quot;accountId&quot;: &quot;98453f5f-47b2-48bc-a7d0-15f7aa434a6b&quot;
+  }
+}</component>
+  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
+  <component name="KubernetesApiProvider"><![CDATA[{
+  "isMigrated": true
+}]]></component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.4093604961456294" />
+      <entry key="MS500" value="2.9564703129225034" />
+      <entry key="S2" value="5.549593473203633" />
+      <entry key="S5" value="12.769958348676171" />
+      <entry key="S10" value="24.58563872182926" />
+      <entry key="S30" value="47.79268059117492" />
+      <entry key="S60" value="58.84661958380638" />
+      <entry key="M2" value="65.80636281116149" />
+      <entry key="M5" value="70.55824134109126" />
+      <entry key="M10" value="72.25024142488029" />
+      <entry key="M15" value="72.82696068109723" />
+      <entry key="M30" value="73.41115956429576" />
+      <entry key="H1" value="73.75837241738527" />
+      <entry key="H2" value="74.25482627034431" />
+      <entry key="H4" value="75.02532288003059" />
+      <entry key="D1" value="76.52546671278124" />
+      <entry key="W1" value="76.92738228596222" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="8.109654627053899E-5" />
+      <entry key="MS500" value="0.15198491039788717" />
+      <entry key="S2" value="0.6243816311404922" />
+      <entry key="S5" value="0.8282854781246405" />
+      <entry key="S10" value="0.9101019053516154" />
+      <entry key="S30" value="0.9690882797389058" />
+      <entry key="S60" value="0.9844228155314697" />
+      <entry key="M2" value="0.992180838119478" />
+      <entry key="M5" value="0.9968649677805937" />
+      <entry key="M10" value="0.9984312534073609" />
+      <entry key="M15" value="0.9989538953067651" />
+      <entry key="M30" value="0.9994768107899078" />
+      <entry key="H1" value="0.9997383711701315" />
+      <entry key="H2" value="0.9998691770277409" />
+      <entry key="H4" value="0.9999345863743992" />
+      <entry key="D1" value="0.9999890974319059" />
+      <entry key="W1" value="0.9999984424829946" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="1.2888783173362364" />
+      <entry key="MS500" value="2.938287775403607" />
+      <entry key="S2" value="5.938255294512663" />
+      <entry key="S5" value="13.447846292380666" />
+      <entry key="S10" value="25.39958575592337" />
+      <entry key="S30" value="48.71758768153188" />
+      <entry key="S60" value="59.80579054330909" />
+      <entry key="M2" value="66.78486706549079" />
+      <entry key="M5" value="71.54933921035408" />
+      <entry key="M10" value="73.2457354439512" />
+      <entry key="M15" value="73.82394415009743" />
+      <entry key="M30" value="74.40964488365368" />
+      <entry key="H1" value="74.75761194968149" />
+      <entry key="H2" value="75.25444064079372" />
+      <entry key="H4" value="76.02512497976795" />
+      <entry key="D1" value="77.52543199975949" />
+      <entry key="W1" value="77.92737725993871" />
+    </decayedShown>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3FafX8wkr12gjq2TYYUoGIwnL22" />
+  <component name="ProjectSessionTemplates">
+    <option name="panelTemplate">
+      <template>
+        <option name="modeId" value="Agent" />
+        <option name="model">
+          <model>
+            <option name="modelType" value="builtin_family" />
+            <option name="modelValue" value="auto" />
+          </model>
+        </option>
+        <option name="targetType" value="BACKGROUND" />
+      </template>
+    </option>
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "copilot.chat.legacySessionMetadata.migrated": "true",
+    "git-widget-placeholder": "dev",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "run.configurations.included.in.services": "true",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager" selected="Spring Boot.AuthServiceApplication">
+    <configuration name="AuthServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="auth-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.moviebooking.auth_service.AuthServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MovieServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="movie-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.moviebooking.movie_service.MovieServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PaymentServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="payment-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.moviebooking.payment_service.PaymentServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ReservationServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="reservation-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.moviebooking.reservation_service.ReservationServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ShowServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="show-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.moviebooking.show_service.ShowServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-37e91769500f-intellij.indexing.shared.core-IU-261.25134.95" />
+        <option value="bundled-js-predefined-d6986cc7102b-31caf2ab9e3c-JavaScript-IU-261.25134.95" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="56cbb5fc-fcf3-47dd-9b1b-040eea1368dd" name="Changes" comment="" />
+      <created>1782318142492</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1782318142492</updated>
+      <workItem from="1782318142495" duration="405000" />
+      <workItem from="1782318605702" duration="972000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

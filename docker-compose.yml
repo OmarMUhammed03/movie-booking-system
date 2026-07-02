@@ -38,6 +38,19 @@ services:
     volumes:
       - user_db_data:/var/lib/postgresql/data
 
+  show-db:
+    image: postgres:16
+    container_name: show_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: show_db
+      POSTGRES_USER: show_user
+      POSTGRES_PASSWORD: show_pass
+    ports:
+      - "5436:5432"
+    volumes:
+      - show_db_data:/var/lib/postgresql/data
+
   rabbitmq:
     image: rabbitmq:4.0-management
     container_name: rabbitmq
@@ -54,4 +67,5 @@ volumes:
   movie_db_data:
   auth_db_data:
   user_db_data:
+  show_db_data:
   rabbitmq_data:

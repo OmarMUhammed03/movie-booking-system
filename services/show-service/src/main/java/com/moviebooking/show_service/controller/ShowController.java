@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -22,7 +23,7 @@ public class ShowController {
 
     private final ShowService showService;
 
-    // TODO: @PreAuthorize("hasRole('ADMIN')") Security layer
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @Operation(summary = "Create a new show", description = "Schedules a new show for a movie in a hall. Restricted to administrators.")
     public ResponseEntity<ShowResponse> createShow(@Valid @RequestBody ShowRequest request) {
@@ -43,7 +44,7 @@ public class ShowController {
         return ResponseEntity.ok(showService.getAllShows());
     }
 
-    // TODO: @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     @Operation(summary = "Update an existing show", description = "Updates the fields of an existing show record found by its UUID.")
     public ResponseEntity<ShowResponse> updateShow(
@@ -52,7 +53,7 @@ public class ShowController {
         return ResponseEntity.ok(showService.updateShow(id, request));
     }
 
-    // TODO: @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a show record", description = "Permanently removes a show from the database using its ID.")
     public ResponseEntity<Void> deleteShow(@PathVariable UUID id) {
