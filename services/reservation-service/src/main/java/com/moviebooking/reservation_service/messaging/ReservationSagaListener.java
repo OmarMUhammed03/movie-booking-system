@@ -1,9 +1,9 @@
 package com.moviebooking.reservation_service.messaging;
 
 import com.moviebooking.reservation_service.config.RabbitMQConfig;
-import com.moviebooking.reservation_service.event.ReservationSagaEvent;
 import com.moviebooking.reservation_service.model.Reservation;
 import com.moviebooking.reservation_service.repository.ReservationRepository;
+import com.moviebooking.shared.event.ReservationSagaEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
