@@ -11,12 +11,20 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
+    // --- Exchanges ---
     public static final String RESERVATION_EXCHANGE = "reservation.events";
     public static final String TICKET_EXCHANGE = "ticket.events";
     public static final String PAYMENT_EXCHANGE = "payment.events";
 
     public static final String RESERVATION_UPDATE_QUEUE = "reservation.update.queue";
 
+    public static final String ROUTING_KEY_RESERVATION_CREATED = "reservation.created";
+    public static final String ROUTING_KEY_TICKET_RESERVED = "ticket.reserved";
+    public static final String ROUTING_KEY_TICKET_FAILED = "ticket.reservation.failed";
+    public static final String ROUTING_KEY_PAYMENT_SUCCEEDED = "payment.succeeded";
+    public static final String ROUTING_KEY_PAYMENT_FAILED = "payment.failed";
+
+    // --- Exchange Beans ---
     @Bean public TopicExchange reservationExchange() { return new TopicExchange(RESERVATION_EXCHANGE); }
     @Bean public TopicExchange ticketExchange() { return new TopicExchange(TICKET_EXCHANGE); }
     @Bean public TopicExchange paymentExchange() { return new TopicExchange(PAYMENT_EXCHANGE); }
@@ -26,28 +34,24 @@ public class RabbitMQConfig {
         return QueueBuilder.durable(RESERVATION_UPDATE_QUEUE).build();
     }
 
-    // Optional: lets us fill in the real totalPrice once Show Service confirms it.
-    // Reservation stays PENDING here — this event alone doesn't change status.
     @Bean
     public Binding ticketReservedBinding() {
-        return BindingBuilder.bind(reservationUpdateQueue()).to(ticketExchange()).with("ticket.reserved");
+        return BindingBuilder.bind(reservationUpdateQueue()).to(ticketExchange()).with(ROUTING_KEY_TICKET_RESERVED);
     }
 
-    // Tickets weren't available — cancel immediately, payment never happens.
     @Bean
     public Binding ticketFailedBinding() {
-        return BindingBuilder.bind(reservationUpdateQueue()).to(ticketExchange()).with("ticket.reservation.failed");
+        return BindingBuilder.bind(reservationUpdateQueue()).to(ticketExchange()).with(ROUTING_KEY_TICKET_FAILED);
     }
 
-    // The two outcomes from Payment Service — this is what actually resolves PENDING.
     @Bean
     public Binding paymentSucceededBinding() {
-        return BindingBuilder.bind(reservationUpdateQueue()).to(paymentExchange()).with("payment.succeeded");
+        return BindingBuilder.bind(reservationUpdateQueue()).to(paymentExchange()).with(ROUTING_KEY_PAYMENT_SUCCEEDED);
     }
 
     @Bean
     public Binding paymentFailedBinding() {
-        return BindingBuilder.bind(reservationUpdateQueue()).to(paymentExchange()).with("payment.failed");
+        return BindingBuilder.bind(reservationUpdateQueue()).to(paymentExchange()).with(ROUTING_KEY_PAYMENT_FAILED);
     }
 
     @Bean

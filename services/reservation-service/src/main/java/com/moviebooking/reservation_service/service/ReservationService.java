@@ -54,7 +54,11 @@ public class ReservationService {
                 .ticketIds(request.getTicketIds())
                 .build();
 
-        rabbitTemplate.convertAndSend(RabbitMQConfig.RESERVATION_EXCHANGE, "reservation.created", event);
+        rabbitTemplate.convertAndSend(
+                RabbitMQConfig.RESERVATION_EXCHANGE,
+                RabbitMQConfig.ROUTING_KEY_RESERVATION_CREATED,
+                event
+        );
 
         return reservationMapper.toResponse(saved);
     }
