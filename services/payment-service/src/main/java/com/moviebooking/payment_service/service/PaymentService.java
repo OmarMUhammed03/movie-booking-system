@@ -6,4 +6,6 @@ import com.moviebooking.payment_service.dto.response.CheckoutSessionResponse;
 public interface PaymentService {
 
     CheckoutSessionResponse createCheckoutSession(CreateCheckoutSessionRequest request);
+
+    void handleWebhookEvent(String payload, String signatureHeader);
 }
