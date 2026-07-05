@@ -95,6 +95,20 @@ services:
     networks:
       - movie-network
 
+  reservation-db:
+    image: postgres:16
+    container_name: reservation_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: reservation_db
+      POSTGRES_USER: reservation_user
+      POSTGRES_PASSWORD: reservation_pass
+    ports:
+      - "5437:5432"
+    volumes:
+      - reservation_db_data:/var/lib/postgresql/data
+    networks:
+      - movie-network
   rabbitmq:
     image: rabbitmq:4.0-management
     container_name: rabbitmq
@@ -215,6 +229,7 @@ volumes:
   user_db_data:
   show_db_data:
   rabbitmq_data:
+  reservation_db_data:
   redis_data:
 #
 networks:
