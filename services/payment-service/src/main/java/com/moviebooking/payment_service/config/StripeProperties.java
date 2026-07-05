@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class StripeProperties {
 
     private String apiKey;
+    private String webhookSecret;
     private String successUrl;
     private String cancelUrl;
 
