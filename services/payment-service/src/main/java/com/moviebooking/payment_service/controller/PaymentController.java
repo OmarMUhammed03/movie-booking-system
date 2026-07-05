@@ -6,10 +6,7 @@ import com.moviebooking.payment_service.service.PaymentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -26,5 +23,14 @@ public class PaymentController {
         CheckoutSessionResponse response = paymentService.createCheckoutSession(request);
         URI location = URI.create("/api/payments/checkout/" + response.id());
         return ResponseEntity.created(location).body(response);
+    }
+
+
+    @PostMapping("/webhook")
+    public ResponseEntity<String> handleStripeWebhook(
+            @RequestBody String payload,
+            @RequestHeader("Stripe-Signature") String signatureHeader) {
+        paymentService.handleWebhookEvent(payload, signatureHeader);
+        return ResponseEntity.ok("Webhook received");
     }
 }
