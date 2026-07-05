@@ -1,6 +1,7 @@
 package com.moviebooking.auth_service.controller;
 
 import com.moviebooking.auth_service.dto.AuthResponse;
+import com.moviebooking.auth_service.dto.GoogleLoginRequest;
 import com.moviebooking.auth_service.dto.LoginRequest;
 import com.moviebooking.auth_service.dto.RefreshRequest;
 import com.moviebooking.auth_service.dto.SignUpRequest;
@@ -31,14 +32,21 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(request));
     }
 
+    @PostMapping("/google")
+    public ResponseEntity<AuthResponse> loginWithGoogle(@RequestBody GoogleLoginRequest request) {
+        return ResponseEntity.ok(authService.loginWithGoogle(request));
+    }
+
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@RequestBody RefreshRequest request){
         authService.logout(request.refreshToken());
-        return ResponseEntity.noContent().build(); // 204 No Content is standard for logout
+        return ResponseEntity.noContent().build(); // 204 No Content
     }
 
     @PostMapping("/refresh")
     public ResponseEntity<AuthResponse> refresh(@RequestBody RefreshRequest request){
         return ResponseEntity.ok(authService.refresh(request.refreshToken()));
     }
+
+    // TODO: ADD change password endpoint
 }
