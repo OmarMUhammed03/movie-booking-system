@@ -7,12 +7,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -54,22 +56,22 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(passwordEncoder());
-        provider.setUserDetailsService(userDetailsService);
-        return provider;
-    }
+//    @Bean
+//    DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
+//        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+//        provider.setPasswordEncoder(passwordEncoder());
+//        provider.setUserDetailsService(userDetailsService);
+//        return provider;
+//    }
 
 
     @Bean
     AuthenticationManager authenticationManager(HttpSecurity http,
-                                                DaoAuthenticationProvider daoAuthenticationProvider) throws Exception {
+                                                AuthenticationProvider customAuthenticationProvider) throws Exception {
         AuthenticationManagerBuilder builder =
                 http.getSharedObject(AuthenticationManagerBuilder.class);
 //        builder.authenticationProvider(jwtAuthProvider);          // handles JWTAuthToken
-        builder.authenticationProvider(daoAuthenticationProvider); // handles UsernamePasswordAuthenticationToken
+        builder.authenticationProvider(customAuthenticationProvider); // handles UsernamePasswordAuthenticationToken
         return builder.build();
     }
 
