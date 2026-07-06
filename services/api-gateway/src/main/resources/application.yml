@@ -34,7 +34,6 @@ spring:
           predicates:
             - Path=/api/users/**
           filters:
-            - StripPrefix=1
             - name: RequestRateLimiter
               args:
                 redis-rate-limiter: "#{@redisRateLimiter}"
@@ -45,7 +44,6 @@ spring:
           predicates:
             - Path=/api/movies/**
           filters:
-            - StripPrefix=1
             - name: RequestRateLimiter
               args:
                 redis-rate-limiter: "#{@redisRateLimiter}"
@@ -56,7 +54,6 @@ spring:
           predicates:
             - Path=/api/shows/**
           filters:
-            - StripPrefix=1
             - name: RequestRateLimiter
               args:
                 redis-rate-limiter: "#{@redisRateLimiter}"
@@ -67,7 +64,6 @@ spring:
           predicates:
             - Path=/api/reservations/**
           filters:
-            - StripPrefix=1
             - name: RequestRateLimiter
               args:
                 redis-rate-limiter: "#{@redisRateLimiter}"
@@ -78,7 +74,6 @@ spring:
           predicates:
             - Path=/api/payments/**
           filters:
-            - StripPrefix=1
             - name: RequestRateLimiter
               args:
                 redis-rate-limiter: "#{@redisRateLimiter}"

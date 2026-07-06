@@ -67,13 +67,13 @@ public class GlobalFilters implements GlobalFilter, Ordered {
                 );
                 long endTime = System.currentTimeMillis();
                 long duration = endTime - startTime;
-                
+
                 String logMessage = String.format(
-                    "Request: %s %s - Duration: %dms - Status: %d",
-                    mutatedExchange.getRequest().getMethod(),
-                    mutatedExchange.getRequest().getPath(),
-                    duration,
-                    mutatedExchange.getResponse().getStatusCode()
+                        "Request: %s %s - Duration: %dms - Status: %s",
+                        mutatedExchange.getRequest().getMethod(),
+                        mutatedExchange.getRequest().getPath(),
+                        duration,
+                        mutatedExchange.getResponse().getStatusCode()
                 );
                 
                 log.info(logMessage);
@@ -84,11 +84,14 @@ public class GlobalFilters implements GlobalFilter, Ordered {
     public GatewayFilter responseTimingFilter() {
         return (exchange, chain) -> {
             Instant startTime = Instant.now();
-            return chain.filter(exchange).then(Mono.fromRunnable(() -> {
-                Instant endTime = Instant.now();
-                long durationMs = java.time.Duration.between(startTime, endTime).toMillis();
-                
+            exchange.getResponse().beforeCommit(() -> {
+                long durationMs = java.time.Duration.between(startTime, Instant.now()).toMillis();
                 exchange.getResponse().getHeaders().add(GatewayConstants.HEADER_X_RESPONSE_TIME_MS, String.valueOf(durationMs));
+                return Mono.empty();
+            });
+            
+            return chain.filter(exchange).then(Mono.fromRunnable(() -> {
+                long durationMs = java.time.Duration.between(startTime, Instant.now()).toMillis();
                 
                 String timingLog = String.format(
                     "Response Time: %dms for %s %s",
@@ -113,8 +116,16 @@ public class GlobalFilters implements GlobalFilter, Ordered {
                 .build();
             
             return chain.filter(mutatedExchange).then(Mono.fromRunnable(() -> {
-                exchange.getResponse().getHeaders().add(GatewayConstants.HEADER_X_RESPONSE_AUDIT_TIMESTAMP, Instant.now().toString());
-                exchange.getResponse().getHeaders().add(GatewayConstants.HEADER_X_RESPONSE_STATUS, String.valueOf(exchange.getResponse().getStatusCode()));
+                String auditLog = String.format(
+                    "Audit - Request: %s %s - User-Agent: %s - X-Forwarded-For: %s - Response Status: %s",
+                    mutatedExchange.getRequest().getMethod(),
+                    mutatedExchange.getRequest().getPath(),
+                    mutatedExchange.getRequest().getHeaders().getFirst(GatewayConstants.HEADER_X_REQUEST_USER_AGENT),
+                    mutatedExchange.getRequest().getHeaders().getFirst(GatewayConstants.HEADER_X_REQUEST_FORWARDED_FOR),
+                    mutatedExchange.getResponse().getStatusCode()
+                );
+                
+                log.info(auditLog);
             }));
         };
     }
