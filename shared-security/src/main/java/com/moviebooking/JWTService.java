@@ -22,13 +22,16 @@ import java.util.stream.Collectors;
 
 public class JWTService {
 
-    private final RSAPublicKey publicKey ;
+    private final RSAPublicKey publicKey;
 
     public JWTService(RSAPublicKey publicKey) {
         this.publicKey = publicKey;
     }
 
 
+    public String getUserIdFromToken(String token) {
+        return parseClaims(token).get("userId", String.class);
+    }
 
     public String getUsernameFromToken(String token) {
         return parseClaims(token).getSubject();
