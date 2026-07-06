@@ -15,9 +15,20 @@ import java.util.List;
 @Slf4j
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(PaymentNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handlePaymentNotFound(PaymentNotFoundException ex) {
+        return buildError(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
     @ExceptionHandler(PaymentAlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> handlePaymentAlreadyExists(PaymentAlreadyExistsException ex) {
         return buildError(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(StripeWebhookException.class)
+    public ResponseEntity<ErrorResponse> handleStripeWebhook(StripeWebhookException ex) {
+        log.warn("Stripe webhook error: {}", ex.getMessage());
+        return buildError(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(PaymentProcessingException.class)
