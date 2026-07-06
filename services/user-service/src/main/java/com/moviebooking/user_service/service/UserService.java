@@ -1,7 +1,10 @@
 package com.moviebooking.user_service.service;
 
+import com.moviebooking.shared.dto.PaginationRequest;
+import com.moviebooking.shared.dto.PaginationResponse;
 import com.moviebooking.shared.event.UserRegisteredEvent;
 import com.moviebooking.user_service.dto.UserDto;
+import com.moviebooking.user_service.dto.UserPatchDto;
 import com.moviebooking.user_service.dto.UserUpdateDto;
 import com.moviebooking.user_service.exception.ResourceNotFoundException;
 import com.moviebooking.user_service.mapper.UserMapper;
@@ -9,6 +12,9 @@ import com.moviebooking.user_service.model.User;
 import com.moviebooking.user_service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -28,13 +34,28 @@ public class UserService {
     private final UserMapper userMapper;
 
     @Transactional(readOnly = true)
-    public List<UserDto> getAllUsers() {
-        log.info("Fetching all users from repository");
-        List<UserDto> users = userRepository.findAll().stream()
+    public PaginationResponse<UserDto> getAllUsers(PaginationRequest paginationRequest) {
+        log.info("Fetching all users from repository with pagination: page={}, size={}, name={}", 
+                paginationRequest.getPage(), paginationRequest.getSize(), paginationRequest.getName());
+        
+        Pageable pageable = PageRequest.of(paginationRequest.getPage(), paginationRequest.getSize());
+        Page<User> userPage = userRepository.findUsersByName(paginationRequest.getName(), pageable);
+        
+        List<UserDto> users = userPage.getContent().stream()
                 .map(userMapper::toDto)
                 .collect(Collectors.toList());
-        log.info("Returning {} users", users.size());
-        return users;
+        
+        log.info("Returning {} users out of {} total", users.size(), userPage.getTotalElements());
+        
+        return PaginationResponse.<UserDto>builder()
+                .content(users)
+                .pageNumber(userPage.getNumber())
+                .pageSize(userPage.getSize())
+                .totalElements(userPage.getTotalElements())
+                .totalPages(userPage.getTotalPages())
+                .last(userPage.isLast())
+                .first(userPage.isFirst())
+                .build();
     }
 
     @Transactional(readOnly = true)
@@ -68,6 +89,27 @@ public class UserService {
         UserDto updatedUser = userMapper.toDto(userRepository.save(user));
         log.info("Successfully updated user with id: {}", id);
         return updatedUser;
+    }
+
+    @Transactional
+    public UserDto patchUser(UUID id, UserPatchDto patchDto) {
+        log.info("Patching user with id: {}", id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+
+        if (patchDto.getFirstName() != null) {
+            user.setFirstName(patchDto.getFirstName());
+        }
+        if (patchDto.getLastName() != null) {
+            user.setLastName(patchDto.getLastName());
+        }
+        if (patchDto.getPhone() != null) {
+            user.setPhone(patchDto.getPhone());
+        }
+
+        UserDto patchedUser = userMapper.toDto(userRepository.save(user));
+        log.info("Successfully patched user with id: {}", id);
+        return patchedUser;
     }
 
     @Transactional
