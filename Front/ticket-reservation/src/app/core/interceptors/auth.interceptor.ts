@@ -7,7 +7,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = authService.getToken();
 
   // Attach the token if it exists and is not the placeholder string
-  if (token && token !== 'PASTE_JWT_HERE') {
+  if (token) {
     const clonedRequest = req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`
