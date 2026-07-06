@@ -109,6 +109,32 @@ services:
       - reservation_db_data:/var/lib/postgresql/data
     networks:
       - movie-network
+  ai-db:
+    image: pgvector/pgvector:pg16
+    container_name: ai_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ai_db
+      POSTGRES_USER: ai_user
+      POSTGRES_PASSWORD: ai_pass
+    ports:
+      - "5438:5432"
+    volumes:
+      - ai_db_data:/var/lib/postgresql/data
+    networks:
+      - movie-network
+
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - movie-network
+
   rabbitmq:
     image: rabbitmq:4.0-management
     container_name: rabbitmq
@@ -231,6 +257,8 @@ volumes:
   rabbitmq_data:
   reservation_db_data:
   redis_data:
+  ai_db_data:
+  ollama_data:
 #
 networks:
   movie-network:

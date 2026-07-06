@@ -79,6 +79,20 @@ spring:
                 redis-rate-limiter: "#{@redisRateLimiter}"
                 key-resolver: "#{@userKeyResolver}"
 
+        - id: ai-service
+          uri: lb://ai-service
+          predicates:
+            - Path=/api/ai/**
+          # CPU-bound LLM replies from Ollama can exceed the global 30s response-timeout,
+          # so this route gets 60s (milliseconds) without affecting the other services
+          metadata:
+            response-timeout: 60000
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter: "#{@redisRateLimiter}"
+                key-resolver: "#{@userKeyResolver}"
+
       default-filters:
         - name: CircuitBreaker
           args:

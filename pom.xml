@@ -23,6 +23,7 @@
         <module>services/reservation-service</module>
         <module>services/payment-service</module>
         <module>services/api-gateway</module>
+        <module>services/ai-service</module>
     </modules>
     <properties>
             <java.version>21</java.version>
