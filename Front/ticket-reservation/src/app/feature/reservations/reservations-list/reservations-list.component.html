@@ -1,0 +1,31 @@
+<div class="max-w-4xl mx-auto p-6">
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-white">My reservations</h1>
+      <p class="text-neutral-400 text-sm">All the shows you've booked, in one place.</p>
+    </div>
+    <button class="bg-amber-500 text-black font-medium px-4 py-2 rounded-lg">
+      Book another
+    </button>
+  </div>
+
+  @if (resource.isLoading()) {
+    <div class="space-y-3">
+      @for (i of [1, 2, 3]; track i) {
+        <div class="h-24 bg-neutral-800 rounded-xl animate-pulse"></div>
+      }
+    </div>
+  } @else if (resource.error()) {
+    <div class="text-red-400 bg-red-500/10 rounded-xl p-4">Failed to load reservations.</div>
+  } @else if (resource.hasValue() && resource.value().length === 0) {
+    <div class="text-center text-neutral-400 py-16">
+      No reservations yet — go find something to watch!
+    </div>
+  } @else {
+    <div class="space-y-3">
+      @for (r of resource.value(); track r.id) {
+        <app-reservation-card [reservation]="r" />
+      }
+    </div>
+  }
+</div>

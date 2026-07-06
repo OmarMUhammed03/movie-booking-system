@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -25,5 +26,9 @@ public class ReservationController {
     @GetMapping("/{id}")
     public ResponseEntity<ReservationResponse> get(@PathVariable UUID id) {
         return ResponseEntity.ok(reservationService.getReservation(id));
+    }
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<ReservationResponse>> getByUserId(@PathVariable UUID userId) {
+        return ResponseEntity.ok(reservationService.getReservationsByUserId(userId));
     }
 }

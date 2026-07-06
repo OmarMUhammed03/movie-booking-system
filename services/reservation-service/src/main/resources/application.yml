@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: reservation-service
+  datasource:
+    url: jdbc:postgresql://localhost:5437/reservation_db
+    username: reservation_user
+    password: reservation_pass
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: 8085
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+    healthcheck:
+      enabled: true
+  instance:
+    prefer-ip-address: true
+    health-check-url-path: /actuator/health
+    status-page-url-path: /actuator/info
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+jwt:
+  public-key: classpath:rsa/public_key.pem

@@ -1,0 +1,24 @@
+<div class="flex items-center gap-4 bg-neutral-800 rounded-xl p-4">
+  <img
+    [src]="reservation().show.posterUrl"
+    [alt]="reservation().show.movieTitle"
+    class="w-14 h-20 rounded-lg object-cover flex-shrink-0"
+  />
+
+  <div class="flex-1 min-w-0">
+    <div class="flex items-center gap-2 mb-1">
+      <h3 class="text-white font-semibold truncate">{{ reservation().show.movieTitle }}</h3>
+      <span [class]="statusClasses()">{{ reservation().status }}</span>
+    </div>
+    <p class="text-neutral-400 text-sm">
+      {{ reservation().show.startTime | date: 'MMM d, y, h:mm a' }}
+      &middot; {{ reservation().show.hallName }}
+      &middot; {{ reservation().seatCount }} {{ reservation().seatCount === 1 ? 'seat' : 'seats' }}
+    </p>
+  </div>
+
+  <div class="text-right flex-shrink-0">
+    <p class="text-white font-semibold">${{ reservation().totalPrice | number: '1.2-2' }}</p>
+    <span class="text-amber-400 text-sm font-medium">View →</span>
+  </div>
+</div>
