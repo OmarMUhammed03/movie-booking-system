@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -67,5 +69,11 @@ public class ReservationService {
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ReservationNotFoundException(id));
         return reservationMapper.toResponse(reservation);
+    }
+    public List<ReservationResponse> getReservationsByUserId(UUID userId) {
+        return reservationRepository.findByUserId(userId)
+                .stream()
+                .map(reservationMapper::toResponse)
+                .collect(Collectors.toList());
     }
 }

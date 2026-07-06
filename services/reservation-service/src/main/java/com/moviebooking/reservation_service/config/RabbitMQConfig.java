@@ -25,9 +25,20 @@ public class RabbitMQConfig {
     public static final String ROUTING_KEY_PAYMENT_FAILED = "payment.failed";
 
     // --- Exchange Beans ---
-    @Bean public TopicExchange reservationExchange() { return new TopicExchange(RESERVATION_EXCHANGE); }
-    @Bean public TopicExchange ticketExchange() { return new TopicExchange(TICKET_EXCHANGE); }
-    @Bean public TopicExchange paymentExchange() { return new TopicExchange(PAYMENT_EXCHANGE); }
+    @Bean
+    public TopicExchange reservationExchange() {
+        return new TopicExchange(RESERVATION_EXCHANGE);
+    }
+
+    @Bean
+    public TopicExchange ticketExchange() {
+        return new TopicExchange(TICKET_EXCHANGE);
+    }
+
+    @Bean
+    public TopicExchange paymentExchange() {
+        return new TopicExchange(PAYMENT_EXCHANGE);
+    }
 
     @Bean
     public Queue reservationUpdateQueue() {
