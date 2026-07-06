@@ -27,7 +27,10 @@ public class AuthUser implements UserDetails {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column(unique = true)
+    private String providerId;
+
+    @Column(nullable = true)
     private String password;
 
     private Role role;

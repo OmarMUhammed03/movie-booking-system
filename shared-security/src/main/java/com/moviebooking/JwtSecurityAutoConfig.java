@@ -12,6 +12,8 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication.Type;
 
 import java.security.KeyFactory;
 import java.security.interfaces.RSAPublicKey;
@@ -22,6 +24,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
 
 @AutoConfiguration
+@ConditionalOnWebApplication(type = Type.SERVLET)
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class JwtSecurityAutoConfig {
 
