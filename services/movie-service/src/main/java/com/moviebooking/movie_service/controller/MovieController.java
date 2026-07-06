@@ -23,6 +23,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/movies")
+@CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
 @Tag(name = "Movie Controller", description = "APIs for managing movie catalog records")
 public class MovieController {
