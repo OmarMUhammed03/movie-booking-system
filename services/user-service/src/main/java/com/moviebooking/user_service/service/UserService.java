@@ -29,27 +29,35 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public List<UserDto> getAllUsers() {
-        return userRepository.findAll().stream()
+        log.info("Fetching all users from repository");
+        List<UserDto> users = userRepository.findAll().stream()
                 .map(userMapper::toDto)
                 .collect(Collectors.toList());
+        log.info("Returning {} users", users.size());
+        return users;
     }
 
     @Transactional(readOnly = true)
     public UserDto getUserById(UUID id) {
+        log.info("Fetching user by id: {}", id);
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+        log.info("Found user with id: {}", id);
         return userMapper.toDto(user);
     }
 
     @Transactional(readOnly = true)
     public UserDto getUserByAuthUserId(UUID authUserId) {
+        log.info("Fetching user by authUserId: {}", authUserId);
         User user = userRepository.findByAuthUserId(authUserId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with authUserId: " + authUserId));
+        log.info("Found user with authUserId: {}", authUserId);
         return userMapper.toDto(user);
     }
 
     @Transactional
     public UserDto updateUser(UUID id, @Valid UserUpdateDto updateDto) {
+        log.info("Updating user with id: {}", id);
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
@@ -57,15 +65,19 @@ public class UserService {
         user.setLastName(updateDto.getLastName());
         user.setPhone(updateDto.getPhone());
 
-        return userMapper.toDto(userRepository.save(user));
+        UserDto updatedUser = userMapper.toDto(userRepository.save(user));
+        log.info("Successfully updated user with id: {}", id);
+        return updatedUser;
     }
 
     @Transactional
     public void deleteUser(UUID id) {
+        log.info("Deleting user with id: {}", id);
         if (!userRepository.existsById(id)) {
             throw new ResourceNotFoundException("User not found with id: " + id);
         }
         userRepository.deleteById(id);
+        log.info("Successfully deleted user with id: {}", id);
     }
 
     @Transactional

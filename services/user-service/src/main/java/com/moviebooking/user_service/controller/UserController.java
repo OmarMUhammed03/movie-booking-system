@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
+@Slf4j
 @Tag(name = "User Controller", description = "Endpoints for managing user profiles")
 public class UserController {
 
@@ -26,7 +28,10 @@ public class UserController {
     @GetMapping
     @Operation(summary = "Get all users", description = "Retrieves a list of all user profiles")
     public ResponseEntity<List<UserDto>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
+        log.info("Fetching all users");
+        List<UserDto> users = userService.getAllUsers();
+        log.info("Found {} users", users.size());
+        return ResponseEntity.ok(users);
     }
 
     @GetMapping("/{id}")
@@ -35,7 +40,10 @@ public class UserController {
     @ApiResponse(responseCode = "404", description = "User not found")
     public ResponseEntity<UserDto> getUserById(
             @Parameter(description = "ID of the user to be retrieved") @PathVariable UUID id) {
-        return ResponseEntity.ok(userService.getUserById(id));
+        log.info("Fetching user by id: {}", id);
+        UserDto user = userService.getUserById(id);
+        log.info("Found user with id: {}", id);
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("/auth/{authUserId}")
@@ -44,7 +52,10 @@ public class UserController {
     @ApiResponse(responseCode = "404", description = "User not found")
     public ResponseEntity<UserDto> getUserByAuthUserId(
             @Parameter(description = "Auth User ID of the user to be retrieved") @PathVariable UUID authUserId) {
-        return ResponseEntity.ok(userService.getUserByAuthUserId(authUserId));
+        log.info("Fetching user by authUserId: {}", authUserId);
+        UserDto user = userService.getUserByAuthUserId(authUserId);
+        log.info("Found user with authUserId: {}", authUserId);
+        return ResponseEntity.ok(user);
     }
 
     @PutMapping("/{id}")
@@ -54,7 +65,10 @@ public class UserController {
     public ResponseEntity<UserDto> updateUser(
             @Parameter(description = "ID of the user to be updated") @PathVariable UUID id,
             @Valid @RequestBody UserUpdateDto updateDto) {
-        return ResponseEntity.ok(userService.updateUser(id, updateDto));
+        log.info("Updating user with id: {}", id);
+        UserDto updatedUser = userService.updateUser(id, updateDto);
+        log.info("Successfully updated user with id: {}", id);
+        return ResponseEntity.ok(updatedUser);
     }
 
     @DeleteMapping("/{id}")
@@ -63,7 +77,9 @@ public class UserController {
     @ApiResponse(responseCode = "404", description = "User not found")
     public ResponseEntity<Void> deleteUser(
             @Parameter(description = "ID of the user to be deleted") @PathVariable UUID id) {
+        log.info("Deleting user with id: {}", id);
         userService.deleteUser(id);
+        log.info("Successfully deleted user with id: {}", id);
         return ResponseEntity.noContent().build();
     }
 }
