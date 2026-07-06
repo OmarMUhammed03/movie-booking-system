@@ -14,6 +14,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/reservations")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class ReservationController {
 
     private final ReservationService reservationService;
@@ -23,12 +24,14 @@ public class ReservationController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(reservationService.createReservation(request));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ReservationResponse> get(@PathVariable UUID id) {
-        return ResponseEntity.ok(reservationService.getReservation(id));
-    }
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<ReservationResponse>> getByUserId(@PathVariable UUID userId) {
+    public ResponseEntity<List<ReservationResponse>> getByUserId(@PathVariable("userId") UUID userId) {
         return ResponseEntity.ok(reservationService.getReservationsByUserId(userId));
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ReservationResponse> get( @PathVariable UUID id) {
+        return ResponseEntity.ok(reservationService.getReservation(id));
+    }
+
 }
