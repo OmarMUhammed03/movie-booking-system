@@ -1,0 +1,222 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: api-gateway
+
+  main:
+    web-application-type: reactive
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+
+      routes:
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/auth/**
+          filters:
+            - StripPrefix=1
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter: "#{@redisRateLimiter}"
+                key-resolver: "#{@ipKeyResolver}"
+
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/users/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter: "#{@redisRateLimiter}"
+                key-resolver: "#{@userKeyResolver}"
+
+        - id: movie-service
+          uri: lb://movie-service
+          predicates:
+            - Path=/api/movies/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter: "#{@redisRateLimiter}"
+                key-resolver: "#{@ipKeyResolver}"
+
+        - id: show-service
+          uri: lb://show-service
+          predicates:
+            - Path=/api/shows/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter: "#{@redisRateLimiter}"
+                key-resolver: "#{@ipKeyResolver}"
+
+        - id: reservation-service
+          uri: lb://reservation-service
+          predicates:
+            - Path=/api/reservations/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter: "#{@redisRateLimiter}"
+                key-resolver: "#{@userKeyResolver}"
+
+        - id: payment-service
+          uri: lb://payment-service
+          predicates:
+            - Path=/api/payments/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter: "#{@redisRateLimiter}"
+                key-resolver: "#{@userKeyResolver}"
+
+        - id: ai-service
+          uri: lb://ai-service
+          predicates:
+            - Path=/api/ai/**
+          # CPU-bound LLM replies from Ollama can exceed the global 30s response-timeout,
+          # so this route gets 60s (milliseconds) without affecting the other services
+          metadata:
+            response-timeout: 60000
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter: "#{@redisRateLimiter}"
+                key-resolver: "#{@userKeyResolver}"
+
+      default-filters:
+        - name: CircuitBreaker
+          args:
+            name: defaultCircuitBreaker
+            fallbackUri: forward:/fallback
+
+        - name: Retry
+          args:
+            retries: 3
+            methods:
+              - GET
+              - POST
+            statuses:
+              - INTERNAL_SERVER_ERROR
+              - BAD_GATEWAY
+              - SERVICE_UNAVAILABLE
+              - GATEWAY_TIMEOUT
+
+      httpclient:
+        connect-timeout: 5000
+        response-timeout: 30s
+
+    loadbalancer:
+      retry:
+        enabled: true
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8081/.well-known/jwks.json
+  data:
+    redis:
+      timeout: 2s
+      host: localhost
+      port: 6379
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+    # Spring Cloud Netflix 4.1.3 eagerly loads the health-check handler here.
+    # Disabling it avoids the Boot 3.3.x startup failure while keeping discovery working.
+    healthcheck:
+      enabled: false
+
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 30
+    lease-expiration-duration-in-seconds: 90
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 100
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 10
+        automatic-transition-from-open-to-half-open-enabled: true
+
+    instances:
+      authService:
+        base-config: default
+      userService:
+        base-config: default
+      movieService:
+        base-config: default
+      reservationService:
+        base-config: default
+      paymentService:
+        base-config: default
+
+  ratelimiter:
+    configs:
+      default:
+        limit-for-period: 100
+        limit-refresh-period: 1s
+        timeout-duration: 10s
+
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.gateway: INFO
+    reactor.netty: INFO
+    com.moviebooking.apigateway: DEBUG
+
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,gateway
+
+  endpoint:
+    health:
+      show-details: always
+
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+jwt:
+  secret: ${JWT_SECRET:your-secret-key}
+  expiration: ${JWT_EXPIRATION:86400}
+  refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800}
+
+api:
+  gateway:
+    cors:
+      allowed-origins: "*"
+      allowed-methods: "*"
+      allowed-headers: "*"
+      allow-credentials: false
+      max-age: 3600
+
+    correlation:
+      header-name: X-Correlation-ID
+      generate-if-missing: true

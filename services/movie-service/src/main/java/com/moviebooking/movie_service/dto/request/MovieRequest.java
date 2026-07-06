@@ -9,6 +9,7 @@ import java.time.LocalDate;
 public record MovieRequest(
         @NotBlank(message = "Title is required") String title,
         String description,
+        String genre,
 
         @NotNull(message = "Duration is required")
         @Positive(message = "Duration must be positive")

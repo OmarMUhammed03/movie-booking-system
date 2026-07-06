@@ -20,6 +20,7 @@ public class Movie {
     @Column(nullable = false)
     private String title;
     private String description;
+    private String genre;
     private Integer durationMinutes;
     @Column(length = 1000)
     private String posterUrl;

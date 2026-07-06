@@ -3,87 +3,190 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
          https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.moviebooking</groupId>
-  <artifactId>movie-booking-system</artifactId>
-  <version>1.0.0</version>
+    <groupId>com.moviebooking</groupId>
+    <artifactId>movie-booking-system</artifactId>
+    <version>1.0.0</version>
 
-  <packaging>pom</packaging>
+    <packaging>pom</packaging>
 
-  <modules>
-    <module>shared-lib</module>
+    <modules>
+        <module>shared-lib</module>
+        <module>shared-security</module>
 
-    <module>services/auth-service</module>
-    <module>services/movie-service</module>
-    <module>services/show-service</module>
-    <module>services/reservation-service</module>
-    <module>services/payment-service</module>
-  </modules>
+        <module>services/eureka-server</module>
+        <module>services/auth-service</module>
+        <module>services/user-service</module>
+        <module>services/movie-service</module>
+        <module>services/show-service</module>
+        <module>services/reservation-service</module>
+        <module>services/payment-service</module>
+        <module>services/api-gateway</module>
+        <module>services/ai-service</module>
+    </modules>
+    <properties>
+            <java.version>21</java.version>
+            <spring-boot.version>3.3.5</spring-boot.version>
+            <spring-cloud.version>2023.0.3</spring-cloud.version>
+            <postgresql.version>42.7.5</postgresql.version>
+            <lombok.version>1.18.42</lombok.version>
+            <mapstruct.version>1.6.3</mapstruct.version>
+            <lombok.mapstruct.binding.version>0.2.0</lombok.mapstruct.binding.version>
+            <springdoc.version>2.6.0</springdoc.version>
+            <jjwt.version>0.11.5</jjwt.version>
+            <resilience4j.version>2.2.0</resilience4j.version>
+            <commons-codec.version>1.18.0</commons-codec.version>
+            <swagger.annotations.version>2.2.28</swagger.annotations.version>
+            <amqp.client.version>5.22.0</amqp.client.version>
+            <maven.compiler.source>${java.version}</maven.compiler.source>
+            <maven.compiler.target>${java.version}</maven.compiler.target>
+        </properties>
 
-  <properties>
-    <java.version>21</java.version>
-    <spring-boot.version>3.5.3</spring-boot.version>
-    <postgresql.version>42.7.5</postgresql.version>
-    <lombok.version>1.18.42</lombok.version>
-    <maven.compiler.source>${java.version}</maven.compiler.source>
-    <maven.compiler.target>${java.version}</maven.compiler.target>
-  </properties>
+    <dependencyManagement>
+            <dependencies>
+    
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-dependencies</artifactId>
+                    <version>${spring-boot.version}</version>
+                    <type>pom</type>
+                    <scope>import</scope>
+                </dependency>
+    
+                <dependency>
+                    <groupId>org.springframework.cloud</groupId>
+                    <artifactId>spring-cloud-dependencies</artifactId>
+                    <version>${spring-cloud.version}</version>
+                    <type>pom</type>
+                    <scope>import</scope>
+                </dependency>
+    
+                <dependency>
+                    <groupId>org.postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                    <version>${postgresql.version}</version>
+                </dependency>
+    
+                <dependency>
+                    <groupId>org.projectlombok</groupId>
+                    <artifactId>lombok</artifactId>
+                    <version>${lombok.version}</version>
+                </dependency>
+    
+                <dependency>
+                    <groupId>org.mapstruct</groupId>
+                    <artifactId>mapstruct</artifactId>
+                    <version>${mapstruct.version}</version>
+                </dependency>
+    
+                <dependency>
+                    <groupId>org.mapstruct</groupId>
+                    <artifactId>mapstruct-processor</artifactId>
+                    <version>${mapstruct.version}</version>
+                </dependency>
+    
+                <dependency>
+                    <groupId>org.springdoc</groupId>
+                    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                    <version>${springdoc.version}</version>
+                </dependency>
+    
+                <dependency>
+                    <groupId>io.jsonwebtoken</groupId>
+                    <artifactId>jjwt-api</artifactId>
+                    <version>${jjwt.version}</version>
+                </dependency>
+    
+                <dependency>
+                    <groupId>io.jsonwebtoken</groupId>
+                    <artifactId>jjwt-impl</artifactId>
+                    <version>${jjwt.version}</version>
+                </dependency>
+    
+                <dependency>
+                    <groupId>io.jsonwebtoken</groupId>
+                    <artifactId>jjwt-jackson</artifactId>
+                    <version>${jjwt.version}</version>
+                </dependency>
+    
+                <dependency>
+                    <groupId>io.github.resilience4j</groupId>
+                    <artifactId>resilience4j-spring-boot3</artifactId>
+                    <version>${resilience4j.version}</version>
+                </dependency>
+    
+                <dependency>
+                    <groupId>io.github.resilience4j</groupId>
+                    <artifactId>resilience4j-reactor</artifactId>
+                    <version>${resilience4j.version}</version>
+                </dependency>
+    
+                <dependency>
+                    <groupId>io.github.resilience4j</groupId>
+                    <artifactId>resilience4j-circuitbreaker</artifactId>
+                    <version>${resilience4j.version}</version>
+                </dependency>
+    
+                <dependency>
+                    <groupId>commons-codec</groupId>
+                    <artifactId>commons-codec</artifactId>
+                    <version>${commons-codec.version}</version>
+                </dependency>
+    
+                <dependency>
+                    <groupId>io.swagger.core.v3</groupId>
+                    <artifactId>swagger-annotations-jakarta</artifactId>
+                    <version>${swagger.annotations.version}</version>
+                </dependency>
 
-  <dependencyManagement>
-    <dependencies>
+                <dependency>
+                    <groupId>org.projectlombok</groupId>
+                    <artifactId>lombok-mapstruct-binding</artifactId>
+                    <version>${lombok.mapstruct.binding.version}</version>
+                </dependency>
 
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-dependencies</artifactId>
-        <version>${spring-boot.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
+                <dependency>
+                    <groupId>com.rabbitmq</groupId>
+                    <artifactId>amqp-client</artifactId>
+                    <version>${amqp.client.version}</version>
+                </dependency>
+    
+                <dependency>
+                    <groupId>com.moviebooking</groupId>
+                    <artifactId>shared-lib</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+    
+                <dependency>
+                    <groupId>com.moviebooking</groupId>
+                    <artifactId>shared-security</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </dependencyManagement>
+    <build>
+        <pluginManagement>
+            <plugins>
 
-      <dependency>
-        <groupId>org.postgresql</groupId>
-        <artifactId>postgresql</artifactId>
-        <version>${postgresql.version}</version>
-      </dependency>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.14.0</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                    </configuration>
+                </plugin>
 
-      <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <version>${lombok.version}</version>
-      </dependency>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
+                </plugin>
 
-      <dependency>
-        <groupId>com.moviebooking</groupId>
-        <artifactId>shared-lib</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-
-    </dependencies>
-  </dependencyManagement>
-
-  <build>
-    <pluginManagement>
-      <plugins>
-
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.14.0</version>
-          <configuration>
-            <source>${java.version}</source>
-            <target>${java.version}</target>
-          </configuration>
-        </plugin>
-
-        <plugin>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-maven-plugin</artifactId>
-          <version>${spring-boot.version}</version>
-        </plugin>
-
-      </plugins>
-    </pluginManagement>
-  </build>
+            </plugins>
+        </pluginManagement>
+    </build>
 
 </project>
