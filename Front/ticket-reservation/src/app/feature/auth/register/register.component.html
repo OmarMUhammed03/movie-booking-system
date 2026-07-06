@@ -1,0 +1,101 @@
+<div class="min-h-screen grid lg:grid-cols-2 bg-[#09090f] text-white">
+  <div class="flex items-center justify-center p-6">
+    <form
+      [formGroup]="form"
+      (ngSubmit)="submit()"
+      class="w-full max-w-md space-y-4"
+    >
+      <h1 class="text-4xl font-bold">Create your account</h1>
+      <p class="text-gray-400">
+        It only takes a minute — you’ll be booking in no time.
+      </p>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label for="firstName" class="block text-xs font-medium tracking-wide text-gray-400 mb-1.5">FIRST NAME</label>
+          <input
+            id="firstName"
+            class="w-full rounded-xl border border-white/10 bg-[#10131c] p-4"
+            placeholder="Jane"
+            formControlName="firstName"
+          />
+        </div>
+        <div>
+          <label for="lastName" class="block text-xs font-medium tracking-wide text-gray-400 mb-1.5">LAST NAME</label>
+          <input
+            id="lastName"
+            class="w-full rounded-xl border border-white/10 bg-[#10131c] p-4"
+            placeholder="Doe"
+            formControlName="lastName"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label for="phone" class="block text-xs font-medium tracking-wide text-gray-400 mb-1.5">PHONE</label>
+        <input
+          id="phone"
+          class="w-full rounded-xl border border-white/10 bg-[#10131c] p-4"
+          placeholder="01xxxxxxxxx"
+          formControlName="phone"
+        />
+      </div>
+
+      <div>
+        <label for="email" class="block text-xs font-medium tracking-wide text-gray-400 mb-1.5">EMAIL</label>
+        <input
+          id="email"
+          class="w-full rounded-xl border border-white/10 bg-[#10131c] p-4"
+          placeholder="you@cinebook.io"
+          formControlName="email"
+        />
+      </div>
+
+      <div>
+        <label for="password" class="block text-xs font-medium tracking-wide text-gray-400 mb-1.5">PASSWORD</label>
+        <input
+          id="password"
+          type="password"
+          class="w-full rounded-xl border border-white/10 bg-[#10131c] p-4"
+          placeholder="At least 8 characters"
+          formControlName="password"
+        />
+      </div>
+
+      <div>
+        <label for="confirmPassword" class="block text-xs font-medium tracking-wide text-gray-400 mb-1.5">CONFIRM PASSWORD</label>
+        <input
+          id="confirmPassword"
+          type="password"
+          class="w-full rounded-xl border border-white/10 bg-[#10131c] p-4"
+          placeholder="Repeat password"
+          formControlName="confirmPassword"
+        />
+      </div>
+
+      <div class="rounded-xl border border-white/10 bg-[#10131c] p-4 text-gray-300">
+        Role: <span class="text-amber-400">CUSTOMER</span> — assigned automatically.
+      </div>
+
+      <div *ngIf="error()" class="text-red-400">
+        {{ error() }}
+      </div>
+
+      <button class="w-full rounded-xl bg-amber-400 text-black p-4 font-semibold">
+        Create account
+      </button>
+
+      <app-google-button (credential)="onGoogleCredential($event)" (googleError)="onGoogleError($event)" />
+
+      <p class="text-center text-gray-400">
+        Already have an account?
+        <a routerLink="/login" class="text-amber-400">Sign in</a>
+      </p>
+    </form>
+  </div>
+
+  <div
+    class="hidden lg:block bg-cover bg-center"
+    style="background-image:url('https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?q=80&w=1600&auto=format&fit=crop')"
+  ></div>
+</div>
