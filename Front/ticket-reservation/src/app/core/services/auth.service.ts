@@ -1,22 +1,68 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
+import { environment } from '../../environments/environment';
+import {
+  AuthResponse,
+  GoogleLoginRequest,
+  LoginRequest,
+  RefreshRequest,
+  SignUpRequest
+} from '../models/auth.model';
+import { TokenStorageService } from './token-storage.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  // TEMP: paste a real JWT here (from Postman login call) to test the interceptor
-  // against the live backend. Replace with real token storage once login UI exists.
-  private readonly tokenSignal = signal<string | null>(
-    'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhaG1lZDFAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwidHlwZSI6IkFDQ0VTUyIsInVzZXJJZCI6ImM3ZTMxMjdkLTBjYzAtNDQ5OC1iZmJmLTg1ZWZhMjAzZGMzNyIsImlhdCI6MTc4MzM2MzYxOCwiZXhwIjoxNzgzNDUwMDE4fQ.jiydMZxCwy5VXSuNXL0wJqW5Dv3wN0FlbyNU9T-SgdW4m-iuo6yNsRh0BNrZzFjJmzzrA3Qu4aJvxjZiYnAA38g0kr28RbhIBivGatwqGE62FjjceR2DsJ3g8RSE_muiTnAUxk_sasjus3hyzMrBG3Hwzv1qIu_qGrWkQZ3YkfdPXeHtPTOeP4qjRHP0b4ntWMvfomddI5AQ0nezZMIfO-xgUGDTeXkbM15grsuof_VtWYyRVxneE3Ve0BXM4H0NaUIrlL9B3KrmcvNH3zkJZCh9ATMHmOU8DRIzLj89D1XppvcwNEK7vc6EuiMlI-VbTidaAeoRc8fxoNGLrMbB6Q'
-  );
+  private readonly http = inject(HttpClient);
+  private readonly tokenStorage = inject(TokenStorageService);
+  private readonly baseUrl = environment.apiUrl;
 
-  private readonly userIdSignal = signal<string>(
-    'c7e3127d-0cc0-4498-bfbf-85efa203dc37'
-  );
+  register(request: SignUpRequest): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/auth/register`, request);
+  }
 
-  getToken(): string | null {
-    return this.tokenSignal();
+  login(request: LoginRequest): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.baseUrl}/auth/login`, request).pipe(
+      tap((response) => this.tokenStorage.saveAuth(response))
+    );
+  }
+
+  loginWithGoogle(idToken: string): Observable<AuthResponse> {
+    const request: GoogleLoginRequest = { idToken };
+
+    return this.http.post<AuthResponse>(`${this.baseUrl}/auth/google`, request).pipe(
+      tap((response) => this.tokenStorage.saveAuth(response))
+    );
+  }
+
+  refresh(): Observable<AuthResponse> {
+    const refreshToken = this.tokenStorage.refreshToken ?? '';
+    const request: RefreshRequest = { refreshToken };
+
+    return this.http.post<AuthResponse>(`${this.baseUrl}/auth/refresh`, request).pipe(
+      tap((response) => this.tokenStorage.saveAuth(response))
+    );
+  }
+
+  logout(): Observable<void> {
+    const refreshToken = this.tokenStorage.refreshToken;
+    this.tokenStorage.clear();
+
+    if (!refreshToken) {
+      return new Observable<void>((subscriber) => {
+        subscriber.next();
+        subscriber.complete();
+      });
+    }
+
+    return this.http.post<void>(`${this.baseUrl}/auth/logout`, { refreshToken });
+  }
+
+  isAuthenticated(): boolean {
+    return this.tokenStorage.isLoggedIn;
   }
 
   getUserId(): string {
-    return this.userIdSignal();
+    return this.tokenStorage.userId ?? '';
   }
 }

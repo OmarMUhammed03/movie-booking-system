@@ -80,7 +80,7 @@ public class AuthServiceImpl implements AuthService {
 
             log.info("Authentication successful for {}", user.getEmail());
 
-            return new AuthResponse(accessToken, refreshToken);
+            return new AuthResponse(accessToken, refreshToken, user.getId());
 
         } catch (AuthenticationException ex) {
             log.warn("Authentication failed for {}", request.getEmail());
@@ -110,7 +110,7 @@ public class AuthServiceImpl implements AuthService {
             String accessToken = jwtService.generateAccessToken(user);
             log.info("Refresh Token Updated for user with email: {}", user.getEmail());
 
-            return new AuthResponse(accessToken, refreshToken);
+            return new AuthResponse(accessToken, refreshToken, user.getId());
         }
         log.info("Updating Refresh Token Failed for Token: {}", refreshToken);
         throw new InvalidTokenException();
@@ -174,7 +174,7 @@ public class AuthServiceImpl implements AuthService {
 
         log.info("Google authentication successful for {}", user.getEmail());
 
-        return new AuthResponse(accessToken, refreshToken);
+        return new AuthResponse(accessToken, refreshToken, user.getId());
     }
 
     private AuthUser provisionGoogleUser(String googleId, String email, String firstName, String lastName) {
