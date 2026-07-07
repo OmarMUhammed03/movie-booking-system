@@ -30,7 +30,6 @@ export const routes: Routes = [
       )
   },
   {
-<<<<<<< Updated upstream
     path: 'movies',
     loadComponent: () =>
       import('./feature/movies/movies-list/movies-list.component').then(
@@ -42,13 +41,14 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./feature/movies/movie-details/movie-details.component').then(
         (m) => m.MovieDetailsComponent
-=======
+      )
+  },
+  {
     path: 'profile',
     canActivate: [authGuard],
     loadComponent: () =>
       import('./feature/profile/profile.component').then(
         (m) => m.ProfileComponent
->>>>>>> Stashed changes
       )
   }
 ];
