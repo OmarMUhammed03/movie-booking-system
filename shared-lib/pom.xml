@@ -36,6 +36,7 @@
             <artifactId>swagger-annotations-jakarta</artifactId>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
