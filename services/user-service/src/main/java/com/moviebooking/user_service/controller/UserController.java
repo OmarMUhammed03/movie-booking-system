@@ -49,7 +49,7 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "User found")
     @ApiResponse(responseCode = "404", description = "User not found")
     public ResponseEntity<UserDto> getUserById(
-            @Parameter(description = "ID of the user to be retrieved") @PathVariable UUID id) {
+            @Parameter(description = "ID of the user to be retrieved") @PathVariable("id") UUID id) {
         log.info("Fetching user by id: {}", id);
         UserDto user = userService.getUserById(id);
         log.info("Found user with id: {}", id);
@@ -61,7 +61,7 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "User found")
     @ApiResponse(responseCode = "404", description = "User not found")
     public ResponseEntity<UserDto> getUserByAuthUserId(
-            @Parameter(description = "Auth User ID of the user to be retrieved") @PathVariable UUID authUserId) {
+            @Parameter(description = "Auth User ID of the user to be retrieved") @PathVariable("authUserId") UUID authUserId) {
         log.info("Fetching user by authUserId: {}", authUserId);
         UserDto user = userService.getUserByAuthUserId(authUserId);
         log.info("Found user with authUserId: {}", authUserId);
@@ -73,7 +73,7 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "User updated successfully")
     @ApiResponse(responseCode = "404", description = "User not found")
     public ResponseEntity<UserDto> updateUser(
-            @Parameter(description = "ID of the user to be updated") @PathVariable UUID id,
+            @Parameter(description = "ID of the user to be updated") @PathVariable("id") UUID id,
             @Valid @RequestBody UserUpdateDto updateDto) {
         log.info("Updating user with id: {}", id);
         UserDto updatedUser = userService.updateUser(id, updateDto);
@@ -86,7 +86,7 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "User patched successfully")
     @ApiResponse(responseCode = "404", description = "User not found")
     public ResponseEntity<UserDto> patchUser(
-            @Parameter(description = "ID of the user to be patched") @PathVariable UUID id,
+            @Parameter(description = "ID of the user to be patched") @PathVariable("id") UUID id,
             @RequestBody UserPatchDto patchDto) {
         log.info("Patching user with id: {}", id);
         UserDto patchedUser = userService.patchUser(id, patchDto);
@@ -99,7 +99,7 @@ public class UserController {
     @ApiResponse(responseCode = "204", description = "User deleted successfully")
     @ApiResponse(responseCode = "404", description = "User not found")
     public ResponseEntity<Void> deleteUser(
-            @Parameter(description = "ID of the user to be deleted") @PathVariable UUID id) {
+            @Parameter(description = "ID of the user to be deleted") @PathVariable("id") UUID id) {
         log.info("Deleting user with id: {}", id);
         userService.deleteUser(id);
         log.info("Successfully deleted user with id: {}", id);
