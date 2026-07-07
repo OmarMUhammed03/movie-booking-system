@@ -1,0 +1,20 @@
+<div class="min-h-screen bg-[#09090f] px-6 py-16 text-white">
+  <div class="mx-auto max-w-xl rounded-2xl border border-white/10 bg-neutral-900/70 p-8 text-center">
+    @if (isSuccess()) {
+      <h1 class="mb-3 text-2xl font-bold">Stripe payment completed</h1>
+      <p class="mb-6 text-neutral-300">Payment was simulated successfully for now. Your reservation should appear as confirmed in My reservations.</p>
+    } @else {
+      <h1 class="mb-3 text-2xl font-bold">Payment cancelled</h1>
+      <p class="mb-6 text-neutral-300">The checkout was cancelled. Your reserved seats may be released if payment does not complete.</p>
+    }
+
+    <div class="flex flex-wrap justify-center gap-3">
+      <a routerLink="/reservations" class="rounded-xl bg-amber-400 px-5 py-3 font-semibold text-black hover:bg-amber-300">
+        My reservations
+      </a>
+      <a routerLink="/movies" class="rounded-xl border border-white/10 px-5 py-3 font-semibold text-white hover:border-amber-400/50">
+        Movies
+      </a>
+    </div>
+  </div>
+</div>

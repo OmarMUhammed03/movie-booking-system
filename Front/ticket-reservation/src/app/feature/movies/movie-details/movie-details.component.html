@@ -73,12 +73,28 @@
             <p class="mb-5 text-neutral-300">
               Pick your showtime and seats to complete your booking in under a minute.
             </p>
-            <button
-              type="button"
-              class="rounded-xl bg-amber-400 px-8 py-3.5 font-semibold text-black transition-colors hover:bg-amber-300"
-            >
-              Book tickets
-            </button>
+            @if (showsResource.isLoading()) {
+              <div class="grid gap-3 sm:grid-cols-2">
+                @for (i of [1, 2]; track i) {
+                  <div class="h-16 animate-pulse rounded-xl bg-neutral-800"></div>
+                }
+              </div>
+            } @else if (movieShows().length === 0) {
+              <p class="text-sm text-neutral-500">No showtimes are scheduled for this movie yet.</p>
+            } @else {
+              <div class="grid gap-3 sm:grid-cols-2">
+                @for (show of movieShows(); track show.id) {
+                  <a
+                    [routerLink]="['/shows', show.id, 'seats']"
+                    class="rounded-xl border border-white/10 bg-[#10131c] px-4 py-3 transition-colors hover:border-amber-400/50 hover:bg-amber-400/10"
+                  >
+                    <span class="block font-semibold text-white">{{ show.startTime | date: 'EEE, MMM d' }}</span>
+                    <span class="text-sm text-amber-400">{{ show.startTime | date: 'h:mm a' }}</span>
+                    <span class="ml-3 text-sm text-neutral-400">${{ show.price }}</span>
+                  </a>
+                }
+              </div>
+            }
           </div>
         </div>
       </div>

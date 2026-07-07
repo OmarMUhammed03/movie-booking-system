@@ -27,6 +27,12 @@ export class ShowService {
     );
   }
 
+  getShows(): Promise<ShowDetails[]> {
+    return firstValueFrom(
+      this.http.get<ShowDetails[]>(`${environment.showUrl}/shows`)
+    );
+  }
+
   getTicketsByShow(showId: string): Promise<TicketInfo[]> {
     return firstValueFrom(
       this.http.get<TicketInfo[]>(`${environment.showUrl}/tickets`, {

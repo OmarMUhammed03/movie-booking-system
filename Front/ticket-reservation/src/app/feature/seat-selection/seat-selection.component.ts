@@ -23,9 +23,6 @@ interface SeatRow {
   seats: SeatCell[];
 }
 
-// Flat fee added once per reservation, regardless of seat count.
-const SERVICE_FEE = 1.5;
-
 @Component({
   selector: 'app-seat-selection',
   imports: [DatePipe, DecimalPipe],
@@ -87,9 +84,7 @@ export class SeatSelectionComponent {
 
   seatSubtotal = computed(() => this.selectedTickets().reduce((sum, t) => sum + t.price, 0));
 
-  serviceFee = computed(() => (this.selectedTickets().length > 0 ? SERVICE_FEE : 0));
-
-  total = computed(() => this.seatSubtotal() + this.serviceFee());
+  total = computed(() => this.seatSubtotal());
 
   pricePerSeat = computed(() => {
     const tickets = this.selectedTickets();
@@ -151,12 +146,13 @@ export class SeatSelectionComponent {
     this.submitError.set(null);
 
     try {
-      await this.reservationService.createReservation({
+      const reservation = await this.reservationService.createReservation({
         userId,
         showId: this.showId,
         ticketIds: tickets.map((t) => t.id)
       });
-      await this.router.navigate(['/reservations']);
+
+      await this.router.navigate(['/checkout', reservation.id]);
     } catch {
       this.submitError.set('Could not create the reservation. Please try again.');
     } finally {

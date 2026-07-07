@@ -6,6 +6,7 @@ export const environment = {
   apiUrl: 'http://localhost:8080',
   googleClientId: '322111702009-bkc62icl9bob1fr42ef9imk1362cbve4.apps.googleusercontent.com',
   reservationUrl: '/api/reservations',
+  paymentUrl: '/api/payments',
   showUrl: '/api',
   movieUrl: '/api',
   aiUrl: '/api/ai',

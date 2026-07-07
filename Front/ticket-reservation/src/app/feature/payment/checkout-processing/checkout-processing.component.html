@@ -1,0 +1,37 @@
+<div class="min-h-screen bg-[#09090f] px-6 py-16 text-white">
+  <div class="mx-auto max-w-xl rounded-2xl border border-white/10 bg-neutral-900/70 p-8 text-center">
+    @if (!error()) {
+      <div class="mx-auto mb-6 h-12 w-12 animate-spin rounded-full border-4 border-neutral-700 border-t-amber-400"></div>
+      <h1 class="mb-2 text-2xl font-bold">Preparing checkout</h1>
+      <p class="text-neutral-300">{{ message() }}</p>
+
+      @if (reservation()) {
+        <div class="mt-6 rounded-xl border border-white/10 bg-black/20 p-4 text-sm text-neutral-300">
+          <div class="flex justify-between">
+            <span>Reservation</span>
+            <span class="font-mono text-xs">{{ reservation()!.id.slice(0, 8) }}</span>
+          </div>
+          <div class="mt-2 flex justify-between">
+            <span>Status</span>
+            <span class="text-amber-400">{{ reservation()!.status }}</span>
+          </div>
+          <div class="mt-2 flex justify-between">
+            <span>Total</span>
+            <span>${{ reservation()!.totalPrice | number: '1.2-2' }}</span>
+          </div>
+        </div>
+      }
+    } @else {
+      <h1 class="mb-3 text-2xl font-bold">Checkout paused</h1>
+      <p class="mb-6 text-neutral-300">{{ error() }}</p>
+      <div class="flex flex-wrap justify-center gap-3">
+        <a routerLink="/movies" class="rounded-xl bg-amber-400 px-5 py-3 font-semibold text-black hover:bg-amber-300">
+          Pick seats
+        </a>
+        <a routerLink="/reservations" class="rounded-xl border border-white/10 px-5 py-3 font-semibold text-white hover:border-amber-400/50">
+          My reservations
+        </a>
+      </div>
+    }
+  </div>
+</div>

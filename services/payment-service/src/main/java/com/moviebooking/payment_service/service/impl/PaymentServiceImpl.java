@@ -105,6 +105,52 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
+    public CheckoutSessionResponse simulateSuccessfulPayment(CreateCheckoutSessionRequest request) {
+        long amountCents = toAmountCents(request.totalPrice());
+        String currency = stripeProperties.getCurrency();
+
+        Payment payment = paymentRepository.findByReservationId(request.reservationId());
+        if (payment == null) {
+            payment = Payment.builder()
+                    .reservationId(request.reservationId())
+                    .userId(request.userId())
+                    .showId(request.showId())
+                    .ticketIds(request.ticketIds())
+                    .totalPrice(request.totalPrice())
+                    .amountCents(amountCents)
+                    .currency(currency)
+                    .status(PaymentStatus.SUCCEEDED)
+                    .stripeSessionId("mock_" + request.reservationId())
+                    .build();
+        } else {
+            payment.setUserId(request.userId());
+            payment.setShowId(request.showId());
+            payment.setTicketIds(request.ticketIds());
+            payment.setTotalPrice(request.totalPrice());
+            payment.setAmountCents(amountCents);
+            payment.setCurrency(currency);
+            payment.setStatus(PaymentStatus.SUCCEEDED);
+            if (payment.getStripeSessionId() == null) {
+                payment.setStripeSessionId("mock_" + request.reservationId());
+            }
+        }
+
+        Payment saved = paymentRepository.save(payment);
+        paymentMessagingService.publishPaymentSucceeded(saved);
+
+        return new CheckoutSessionResponse(
+                saved.getId(),
+                saved.getReservationId(),
+                saved.getStripeSessionId(),
+                "/payment/success",
+                saved.getAmountCents(),
+                saved.getCurrency(),
+                saved.getStatus()
+        );
+    }
+
+    @Override
+    @Transactional
     public void handleWebhookEvent(String payload, String signatureHeader) {
 
         log.info( "payload: {} \n signatureHeader: {}" , payload , signatureHeader);

@@ -44,6 +44,27 @@ export const routes: Routes = [
       )
   },
   {
+    path: 'shows/:showId/seats',
+    loadComponent: () =>
+      import('./feature/seat-selection/seat-selection.component').then(
+        (m) => m.SeatSelectionComponent
+      )
+  },
+  {
+    path: 'checkout/:reservationId',
+    loadComponent: () =>
+      import('./feature/payment/checkout-processing/checkout-processing.component').then(
+        (m) => m.CheckoutProcessingComponent
+      )
+  },
+  {
+    path: 'payment/:result',
+    loadComponent: () =>
+      import('./feature/payment/payment-result/payment-result.component').then(
+        (m) => m.PaymentResultComponent
+      )
+  },
+  {
     path: 'profile',
     canActivate: [authGuard],
     loadComponent: () =>

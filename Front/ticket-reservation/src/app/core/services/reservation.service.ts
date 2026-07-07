@@ -131,4 +131,10 @@ export class ReservationService {
       this.http.post<BackendReservationResponse>(environment.reservationUrl, request)
     );
   }
+
+  getReservationById(id: string): Promise<BackendReservationResponse> {
+    return firstValueFrom(
+      this.http.get<BackendReservationResponse>(`${environment.reservationUrl}/${id}`)
+    );
+  }
 }

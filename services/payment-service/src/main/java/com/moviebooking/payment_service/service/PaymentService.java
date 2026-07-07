@@ -7,5 +7,7 @@ public interface PaymentService {
 
     CheckoutSessionResponse createCheckoutSession(CreateCheckoutSessionRequest request);
 
+    CheckoutSessionResponse simulateSuccessfulPayment(CreateCheckoutSessionRequest request);
+
     void handleWebhookEvent(String payload, String signatureHeader);
 }

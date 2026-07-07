@@ -25,6 +25,12 @@ public class PaymentController {
         return ResponseEntity.created(location).body(response);
     }
 
+    @PostMapping("/mock-success")
+    public ResponseEntity<CheckoutSessionResponse> simulateSuccessfulPayment(
+            @Valid @RequestBody CreateCheckoutSessionRequest request) {
+        CheckoutSessionResponse response = paymentService.simulateSuccessfulPayment(request);
+        return ResponseEntity.ok(response);
+    }
 
     @PostMapping("/webhook")
     public ResponseEntity<String> handleStripeWebhook(
