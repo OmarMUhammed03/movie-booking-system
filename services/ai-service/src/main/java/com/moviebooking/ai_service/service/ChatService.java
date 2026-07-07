@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -45,6 +46,9 @@ public class ChatService {
             You are CineBot, the friendly AI assistant of a movie booking website.
             Rules:
             - Recommend ONLY movies that appear in the catalogue context below. Never invent movies, showtimes or prices.
+            - NEVER recommend a movie listed as already watched by the user. You may mention it only as a taste reference ("since you enjoyed ...").
+            - You are an assistant, not an agent: you CANNOT book tickets, reserve seats, or process payments, and you must never offer to do so.
+              If the user wants to book, tell them to open the movie's page on the website and pick their seats there.
             - If the catalogue has no good match for the request, say so honestly and suggest the closest option.
             - Keep replies short and conversational (2-4 sentences), unless the user asks for more detail.
             - When the user's booking habits are provided, prefer suggesting showtimes near their usual time and mention why.
@@ -68,6 +72,9 @@ public class ChatService {
         StringBuilder context = new StringBuilder();
         String searchQuery = request.message();
 
+        // Reservation history first: it powers both the habit hints and the watched-movie filter
+        UserProfile profile = request.userId() != null ? buildUserProfile(request.userId()) : UserProfile.EMPTY;
+
         // "More like this": ground the search in the movie the user is viewing
         MovieDto currentMovie = null;
         if (request.movieId() != null) {
@@ -83,12 +90,17 @@ public class ChatService {
             }
         }
 
-        // Semantic retrieval over the embedded catalogue
+        // Semantic retrieval over the embedded catalogue (over-fetch to survive the filters below)
         List<Document> retrieved = vectorStore.similaritySearch(
-                SearchRequest.builder().query(searchQuery).topK(TOP_K).build());
+                SearchRequest.builder().query(searchQuery).topK(TOP_K + profile.watchedMovieIds().size()).build());
         UUID currentId = currentMovie != null ? currentMovie.id() : null;
+
+        List<Document> watchedHits = retrieved.stream()
+                .filter(doc -> profile.watchedMovieIds().contains(doc.getId()))
+                .toList();
         List<Document> candidates = retrieved.stream()
                 .filter(doc -> currentId == null || !doc.getId().equals(currentId.toString()))
+                .filter(doc -> !profile.watchedMovieIds().contains(doc.getId()))
                 .limit(TOP_K - 1)
                 .toList();
 
@@ -102,12 +114,17 @@ public class ChatService {
             context.append("\n");
         }
 
+        if (!watchedHits.isEmpty()) {
+            context.append("The user has ALREADY WATCHED these (never recommend them, taste reference only): ")
+                    .append(watchedHits.stream()
+                            .map(doc -> String.valueOf(doc.getMetadata().getOrDefault("title", "Unknown")))
+                            .collect(Collectors.joining(", ")))
+                    .append("\n\n");
+        }
+
         // Personalization: usual booking time from reservation history
-        if (request.userId() != null) {
-            String habits = buildBookingHabits(request.userId());
-            if (habits != null) {
-                context.append(habits).append("\n\n");
-            }
+        if (profile.habits() != null) {
+            context.append(profile.habits()).append("\n\n");
         }
 
         // Ground timing suggestions in real upcoming showtimes
@@ -144,38 +161,57 @@ public class ChatService {
                 .toList();
     }
 
-    private String buildBookingHabits(UUID userId) {
+    /**
+     * @param habits          natural-language summary of usual booking time, or null
+     * @param watchedMovieIds movie ids (as strings, matching Document ids) the user has reservations for
+     */
+    private record UserProfile(String habits, Set<String> watchedMovieIds) {
+        static final UserProfile EMPTY = new UserProfile(null, Set.of());
+    }
+
+    private UserProfile buildUserProfile(UUID userId) {
         try {
             List<ReservationDto> reservations = reservationClient.getByUserId(userId);
             if (reservations == null || reservations.isEmpty()) {
-                return null;
+                return UserProfile.EMPTY;
             }
-            List<LocalDateTime> showTimes = reservations.stream()
+            List<ShowDto> shows = reservations.stream()
+                    .filter(r -> !"CANCELLED".equalsIgnoreCase(r.status()))
                     .sorted(Comparator.comparing(ReservationDto::createdAt,
                             Comparator.nullsLast(Comparator.reverseOrder())))
                     .limit(MAX_HISTORY_SAMPLE)
                     .map(reservation -> {
                         try {
-                            ShowDto show = showClient.getShowById(reservation.showId());
-                            return show.startTime();
+                            return showClient.getShowById(reservation.showId());
                         } catch (Exception e) {
                             return null;
                         }
                     })
                     .filter(Objects::nonNull)
                     .toList();
-            if (showTimes.isEmpty()) {
-                return null;
+            if (shows.isEmpty()) {
+                return UserProfile.EMPTY;
             }
 
-            int usualHour = mostFrequent(showTimes, t -> t.getHour());
-            DayOfWeek usualDay = mostFrequent(showTimes, LocalDateTime::getDayOfWeek);
+            Set<String> watchedMovieIds = shows.stream()
+                    .map(show -> show.movieId().toString())
+                    .collect(Collectors.toSet());
 
-            return "User booking habits (from %d past reservations): they usually watch movies around %02d:00, most often on %s."
-                    .formatted(showTimes.size(), usualHour, usualDay);
+            List<LocalDateTime> showTimes = shows.stream()
+                    .map(ShowDto::startTime)
+                    .filter(Objects::nonNull)
+                    .toList();
+            String habits = null;
+            if (!showTimes.isEmpty()) {
+                int usualHour = mostFrequent(showTimes, t -> t.getHour());
+                DayOfWeek usualDay = mostFrequent(showTimes, LocalDateTime::getDayOfWeek);
+                habits = "User booking habits (from %d past reservations): they usually watch movies around %02d:00, most often on %s."
+                        .formatted(showTimes.size(), usualHour, usualDay);
+            }
+            return new UserProfile(habits, watchedMovieIds);
         } catch (Exception e) {
-            log.warn("Could not build booking habits for user {}: {}", userId, e.getMessage());
-            return null;
+            log.warn("Could not build profile for user {}: {}", userId, e.getMessage());
+            return UserProfile.EMPTY;
         }
     }
 

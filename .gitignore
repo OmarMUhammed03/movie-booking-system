@@ -24,6 +24,9 @@ target/
 # IntelliJ IDEA
 .idea/
 
+# Local AI/tooling config
+.claude/
+
 target
 */target
 */*/target
