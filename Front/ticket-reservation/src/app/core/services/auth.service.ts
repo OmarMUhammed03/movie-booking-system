@@ -65,4 +65,31 @@ export class AuthService {
   getUserId(): string {
     return this.tokenStorage.userId ?? '';
   }
+  // Retrieves the email (sub) from the active token
+  getUserEmail(): string {
+    const token = localStorage.getItem('access_token');
+    if (!token) return '';
+    const payload = this.decodeTokenPayload(token);
+    return payload?.sub ?? '';
+  }
+
+  // Retrieves the first role from the active token
+  getUserRole(): string {
+    const token = localStorage.getItem('access_token');
+    if (!token) return '';
+    const payload = this.decodeTokenPayload(token);
+    return payload?.roles && payload.roles.length > 0 ? payload.roles[0] : '';
+  }
+
+  // Decodes the base64 payload of a standard JWT token
+  private decodeTokenPayload(token: string): any {
+    try {
+      const payload = token.split('.')[1];
+      // Convert standard base64url characters to match base64 standards
+      const decoded = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+      return JSON.parse(decoded);
+    } catch {
+      return null;
+    }
+  }
 }

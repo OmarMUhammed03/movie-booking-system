@@ -1,0 +1,22 @@
+<nav class="navbar">
+  <a routerLink="/reservations" class="navbar-brand">TicketReservation</a>
+  <div class="navbar-user">
+    @if (resource.value(); as user) {
+      <button 
+        type="button" 
+        (click)="onNameClick()" 
+        class="navbar-trigger text-white bg-transparent border-0 cursor-pointer hover:text-amber-400 transition"
+      >
+        {{ user.firstName }} {{ user.lastName }}
+      </button>
+
+      @if (isMenuOpen()) {
+        <div class="navbar-dropdown">
+          <a routerLink="/reservations" (click)="closeMenu()">My Reservations</a>
+          <a routerLink="/profile" (click)="closeMenu()">Profile</a>
+          <button type="button" (click)="logout(); closeMenu()">Logout</button>
+        </div>
+      }
+    }
+  </div>
+</nav>
