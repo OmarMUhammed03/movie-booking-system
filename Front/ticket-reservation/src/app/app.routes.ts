@@ -4,7 +4,7 @@ import { authGuard } from './core/guards/auth.guard';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'movies',
     pathMatch: 'full'
   },
   {
@@ -23,18 +23,24 @@ export const routes: Routes = [
   },
   {
     path: 'reservations',
-    canActivate: [authGuard],
+    // canActivate: [authGuard],
     loadComponent: () =>
       import('./feature/reservations/reservations-list/reservations-list.component').then(
         (m) => m.ReservationsListComponent
       )
   },
   {
-    path: 'shows/:showId/seats',
-    canActivate: [authGuard],
+    path: 'movies',
     loadComponent: () =>
-      import('./feature/seat-selection/seat-selection.component').then(
-        (m) => m.SeatSelectionComponent
+      import('./feature/movies/movies-list/movies-list.component').then(
+        (m) => m.MoviesListComponent
+      )
+  },
+  {
+    path: 'movies/:id',
+    loadComponent: () =>
+      import('./feature/movies/movie-details/movie-details.component').then(
+        (m) => m.MovieDetailsComponent
       )
   }
 ];
