@@ -18,11 +18,11 @@ export class AuthService {
   private readonly baseUrl = environment.apiUrl;
 
   register(request: SignUpRequest): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/auth/register`, request);
+    return this.http.post<void>(`${this.baseUrl}/api/auth/register`, request);
   }
 
   login(request: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.baseUrl}/auth/login`, request).pipe(
+    return this.http.post<AuthResponse>(`${this.baseUrl}/api/auth/login`, request).pipe(
       tap((response) => this.tokenStorage.saveAuth(response))
     );
   }
@@ -30,7 +30,7 @@ export class AuthService {
   loginWithGoogle(idToken: string): Observable<AuthResponse> {
     const request: GoogleLoginRequest = { idToken };
 
-    return this.http.post<AuthResponse>(`${this.baseUrl}/auth/google`, request).pipe(
+    return this.http.post<AuthResponse>(`${this.baseUrl}/api/auth/google`, request).pipe(
       tap((response) => this.tokenStorage.saveAuth(response))
     );
   }
@@ -39,7 +39,7 @@ export class AuthService {
     const refreshToken = this.tokenStorage.refreshToken ?? '';
     const request: RefreshRequest = { refreshToken };
 
-    return this.http.post<AuthResponse>(`${this.baseUrl}/auth/refresh`, request).pipe(
+    return this.http.post<AuthResponse>(`${this.baseUrl}/api/auth/refresh`, request).pipe(
       tap((response) => this.tokenStorage.saveAuth(response))
     );
   }
@@ -55,7 +55,7 @@ export class AuthService {
       });
     }
 
-    return this.http.post<void>(`${this.baseUrl}/auth/logout`, { refreshToken });
+    return this.http.post<void>(`${this.baseUrl}/api/auth/logout`, { refreshToken });
   }
 
   isAuthenticated(): boolean {
