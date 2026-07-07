@@ -47,8 +47,10 @@ public class ReservationSagaListener {
             }
 
             case RabbitMQConfig.ROUTING_KEY_PAYMENT_SUCCEEDED -> {
-                int updated = reservationRepository.confirmIfStillPending(event.getReservationId());
-                if (updated == 0) log.info("Reservation {} already resolved, ignoring", event.getReservationId());
+                int updated = reservationRepository.confirmAndUpdatePriceIfStillPending(
+                        event.getReservationId(),
+                        event.getTotalPrice()
+                );                if (updated == 0) log.info("Reservation {} already resolved, ignoring", event.getReservationId());
             }
 
             default -> log.warn("Unhandled routing key: {}", routingKey);

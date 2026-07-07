@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
+import java.math.BigDecimal; // 1. Imported BigDecimal
 import java.util.List;
 import java.util.UUID;
 
@@ -26,15 +26,20 @@ public interface ReservationRepository extends JpaRepository<Reservation, UUID> 
     long countByUserId(UUID userId);
 
     boolean existsByUserIdAndStatus(UUID userId, ReservationStatus status);
-    @Modifying
+
+    @Modifying(clearAutomatically = true)
     @Query("UPDATE Reservation r SET r.status = 'CONFIRMED' WHERE r.id = :id AND r.status = 'PENDING'")
     int confirmIfStillPending(@Param("id") UUID id);
 
-    @Modifying
+    @Modifying(clearAutomatically = true)
     @Query("UPDATE Reservation r SET r.status = 'CANCELLED' WHERE r.id = :id AND r.status = 'PENDING'")
     int cancelIfStillPending(@Param("id") UUID id);
 
-    @Modifying
+    @Modifying(clearAutomatically = true)
     @Query("UPDATE Reservation r SET r.totalPrice = :price WHERE r.id = :id AND r.status = 'PENDING'")
-    int updatePriceIfPending(@Param("id") UUID id, @Param("price") java.math.BigDecimal price);
+    int updatePriceIfPending(@Param("id") UUID id, @Param("price") BigDecimal price);
+
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE Reservation r SET r.status = 'CONFIRMED', r.totalPrice = :price WHERE r.id = :id AND r.status = 'PENDING'")
+    int confirmAndUpdatePriceIfStillPending(@Param("id") UUID id, @Param("price") BigDecimal price);
 }
