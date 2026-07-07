@@ -32,10 +32,12 @@ public class ReservationService {
     @Transactional
     public ReservationResponse createReservation(ReservationRequest request) {
 
+        int numberOfTickets = request.getTicketIds().size();
+        BigDecimal initialTotalPrice = BigDecimal.valueOf(numberOfTickets * 25);
         Reservation reservation = Reservation.builder()
                 .userId(request.getUserId())
                 .showId(request.getShowId())
-                .totalPrice(BigDecimal.ZERO) // filled in once ticket.reserved arrives
+                .totalPrice(initialTotalPrice)
                 .build();
 
         Reservation saved = reservationRepository.save(reservation);
