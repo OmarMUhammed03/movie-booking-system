@@ -16,19 +16,19 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/tickets")
+@RequestMapping("/api/shows/tickets")
 @RequiredArgsConstructor
 @Tag(name = "Ticket Controller", description = "APIs for managing show tickets")
 public class TicketController {
 
     private final TicketService ticketService;
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @Operation(summary = "Create a new ticket", description = "Generates a new ticket for a seat in a show. Restricted to administrators.")
     public ResponseEntity<TicketResponse> createTicket(@Valid @RequestBody TicketRequest request) {
         TicketResponse response = ticketService.createTicket(request);
-        URI location = URI.create("/api/tickets/" + response.id());
+        URI location = URI.create("/api/shows/tickets/" + response.id());
         return ResponseEntity.created(location).body(response);
     }
 
@@ -48,7 +48,7 @@ public class TicketController {
         return ResponseEntity.ok(ticketService.getAllTickets());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     @Operation(summary = "Update an existing ticket", description = "Updates the fields of an existing ticket record found by its UUID.")
     public ResponseEntity<TicketResponse> updateTicket(
@@ -57,7 +57,7 @@ public class TicketController {
         return ResponseEntity.ok(ticketService.updateTicket(id, request));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a ticket record", description = "Permanently removes a ticket from the database using its ID.")
     public ResponseEntity<Void> deleteTicket(@PathVariable UUID id) {

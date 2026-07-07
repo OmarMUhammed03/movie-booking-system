@@ -16,15 +16,15 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/halls")
-@CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping("/api/shows/halls")
+//@CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
 @Tag(name = "Hall Controller", description = "APIs for managing cinema halls")
 public class HallController {
 
     private final HallService hallService;
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @Operation(summary = "Create a new hall", description = "Adds a new cinema hall to the system. Restricted to administrators.")
     public ResponseEntity<HallResponse> createHall(@Valid @RequestBody HallRequest request) {
@@ -45,7 +45,7 @@ public class HallController {
         return ResponseEntity.ok(hallService.getAllHalls());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     @Operation(summary = "Update an existing hall", description = "Updates the fields of an existing hall record found by its UUID.")
     public ResponseEntity<HallResponse> updateHall(
@@ -54,7 +54,7 @@ public class HallController {
         return ResponseEntity.ok(hallService.updateHall(id, request));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a hall record", description = "Permanently removes a hall from the database using its ID.")
     public ResponseEntity<Void> deleteHall(@PathVariable UUID id) {
