@@ -1,24 +1,28 @@
 package com.moviebooking.payment_service.dto.request;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 public record CreateCheckoutSessionRequest(
         @NotNull(message = "reservationId is required")
         UUID reservationId,
 
-        @NotNull(message = "amountCents is required")
-        @Min(value = 50, message = "amountCents must be at least 50")
-        Long amountCents,
+        @NotNull(message = "userId is required")
+        UUID userId,
 
-        @NotBlank(message = "currency is required")
-        @Size(min = 3, max = 3, message = "currency must be a 3-letter ISO code")
-        @Pattern(regexp = "[a-z]{3}", message = "currency must be lowercase ISO 4217 code")
-        String currency
+        @NotNull(message = "showId is required")
+        UUID showId,
+
+        @NotEmpty(message = "ticketIds must not be empty")
+        List<UUID> ticketIds,
+
+        @NotNull(message = "totalPrice is required")
+        @DecimalMin(value = "0.50", message = "totalPrice must be at least 0.50")
+        BigDecimal totalPrice
 ) {
 }
