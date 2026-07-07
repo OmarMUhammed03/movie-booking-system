@@ -104,6 +104,11 @@ spring:
                 key-resolver: "#{@userKeyResolver}"
 
       default-filters:
+        - name: DedupeResponseHeader
+          args:
+            name: Access-Control-Allow-Origin Access-Control-Allow-Credentials Access-Control-Expose-Headers
+            strategy: RETAIN_FIRST
+
         - name: CircuitBreaker
           args:
             name: defaultCircuitBreaker
@@ -114,7 +119,6 @@ spring:
             retries: 3
             methods:
               - GET
-              - POST
             statuses:
               - INTERNAL_SERVER_ERROR
               - BAD_GATEWAY
@@ -224,7 +228,7 @@ api:
       allowed-origins: "*"
       allowed-methods: "*"
       allowed-headers: "*"
-      allow-credentials: false
+      allow-credentials: true
       max-age: 3600
 
     correlation:

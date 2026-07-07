@@ -39,7 +39,7 @@ public class GatewaySecurityConfig {
             GatewayConstants.HEADER_CORRELATION_ID,
             GatewayConstants.HEADER_X_RESPONSE_TIME_MS
         ));
-        configuration.setAllowCredentials(false);
+        configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
