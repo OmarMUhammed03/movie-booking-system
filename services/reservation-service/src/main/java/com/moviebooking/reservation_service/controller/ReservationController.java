@@ -14,7 +14,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/reservations")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class ReservationController {
 
     private final ReservationService reservationService;

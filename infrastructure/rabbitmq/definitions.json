@@ -16,14 +16,13 @@
   "queues": [
     { "name": "user.registration.queue", "vhost": "/", "durable": true, "auto_delete": false, "arguments": {} },
     { "name": "reservation.update.queue", "vhost": "/", "durable": true, "auto_delete": false, "arguments": {} },
-    { "name": "ticket.reservation.queue", "vhost": "/", "durable": true, "auto_delete": false, "arguments": {} },
     { "name": "ticket.update.queue", "vhost": "/", "durable": true, "auto_delete": false, "arguments": {} },
     { "name": "payment.process.queue", "vhost": "/", "durable": true, "auto_delete": false, "arguments": {} }
   ],
   "bindings": [
     { "source": "user.events", "vhost": "/", "destination": "user.registration.queue", "destination_type": "queue", "routing_key": "user.registered", "arguments": {} },
 
-    { "source": "reservation.events", "vhost": "/", "destination": "ticket.reservation.queue", "destination_type": "queue", "routing_key": "reservation.created", "arguments": {} },
+    { "source": "reservation.events", "vhost": "/", "destination": "ticket.update.queue", "destination_type": "queue", "routing_key": "reservation.created", "arguments": {} },
 
     { "source": "ticket.events", "vhost": "/", "destination": "reservation.update.queue", "destination_type": "queue", "routing_key": "ticket.reserved", "arguments": {} },
     { "source": "ticket.events", "vhost": "/", "destination": "reservation.update.queue", "destination_type": "queue", "routing_key": "ticket.reservation.failed", "arguments": {} },

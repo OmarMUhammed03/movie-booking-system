@@ -154,7 +154,7 @@ export class SeatSelectionComponent {
 
       await this.router.navigate(['/checkout', reservation.id]);
     } catch {
-      this.submitError.set('Could not create the reservation. Please try again.');
+      this.submitError.set('Could not complete the reservation. Please try again.');
     } finally {
       this.submitting.set(false);
     }

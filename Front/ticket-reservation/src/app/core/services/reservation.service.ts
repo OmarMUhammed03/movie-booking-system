@@ -137,4 +137,33 @@ export class ReservationService {
       this.http.get<BackendReservationResponse>(`${environment.reservationUrl}/${id}`)
     );
   }
+
+  getReservation(id: string): Promise<BackendReservationResponse> {
+    return this.getReservationById(id);
+  }
+
+  async waitForSagaReady(
+    reservationId: string,
+    fallbackPrice: number
+  ): Promise<BackendReservationResponse> {
+    for (let attempt = 0; attempt < 12; attempt++) {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      const reservation = await this.getReservation(reservationId);
+
+      if (reservation.status === 'CANCELLED') {
+        throw new Error('Ticket reservation failed');
+      }
+
+      if (reservation.totalPrice > 0 && attempt >= 2) {
+        return reservation;
+      }
+    }
+
+    const reservation = await this.getReservation(reservationId);
+    if (reservation.status === 'CANCELLED') {
+      throw new Error('Ticket reservation failed');
+    }
+
+    return { ...reservation, totalPrice: reservation.totalPrice || fallbackPrice };
+  }
 }
