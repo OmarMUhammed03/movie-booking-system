@@ -15,14 +15,14 @@ services:
     #   - api-gateway
 
 
-  eureka-server:
-    build: ./services/eureka-server
-    container_name: eureka-server
-    restart: unless-stopped
-    ports:
-      - "8761:8761"
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
+#  eureka-server:
+#    build: ./services/eureka-server
+#    container_name: eureka-server
+#    restart: unless-stopped
+#    ports:
+#      - "8761:8761"
+#    environment:
+#      SPRING_PROFILES_ACTIVE: docker
 
 #  api-gateway:
 #    build: ./services/api-gateway
@@ -140,16 +140,16 @@ services:
     networks:
       - movie-network
 
-  ollama:
-    image: ollama/ollama
-    container_name: ollama
-    restart: unless-stopped
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama_data:/root/.ollama
-    networks:
-      - movie-network
+#  ollama:
+#    image: ollama/ollama
+#    container_name: ollama
+#    restart: unless-stopped
+#    ports:
+#      - "11434:11434"
+#    volumes:
+#      - ollama_data:/root/.ollama
+#    networks:
+#      - movie-network
 
   rabbitmq:
     image: rabbitmq:4.0-management

@@ -14,11 +14,13 @@ public class AuthResponse {
     private final String accessToken;
     private final String refreshToken;
     private final UUID userId;
+    private final String role;
     private final String tokenType = "Bearer";
 
-    public AuthResponse(String accessToken, String refreshToken, UUID userId) {
+    public AuthResponse(String accessToken, String refreshToken, UUID userId, String role) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.userId = userId;
+        this.role = role;
     }
 }

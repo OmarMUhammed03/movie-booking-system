@@ -13,20 +13,19 @@ let refreshInFlight$: Observable<AuthResponse> | null = null;
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const tokenStorage = inject(TokenStorageService);
   const authService = inject(AuthService);
+  const isAuthEndpoint =
+    req.url.includes('/auth/login') ||
+    req.url.includes('/auth/google') ||
+    req.url.includes('/auth/register') ||
+    req.url.includes('/auth/refresh');
 
   const accessToken = tokenStorage.accessToken;
-  const authReq = accessToken
+  const authReq = accessToken && !isAuthEndpoint
     ? req.clone({ setHeaders: { Authorization: `Bearer ${accessToken}` } })
     : req;
 
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
-      const isAuthEndpoint =
-        req.url.includes('/auth/login') ||
-        req.url.includes('/auth/google') ||
-        req.url.includes('/auth/register') ||
-        req.url.includes('/auth/refresh');
-
       if (error.status !== 401 || isAuthEndpoint || !tokenStorage.refreshToken) {
         return throwError(() => error);
       }

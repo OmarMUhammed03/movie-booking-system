@@ -12,7 +12,12 @@ export class TokenStorageService {
     localStorage.setItem(this.ACCESS_TOKEN_KEY, response.accessToken);
     localStorage.setItem(this.REFRESH_TOKEN_KEY, response.refreshToken);
     localStorage.setItem(this.USER_ID_KEY, response.userId);
-    localStorage.setItem(this.ROLE_KEY, response.role);
+
+    if (response.role) {
+      localStorage.setItem(this.ROLE_KEY, response.role);
+    } else {
+      localStorage.removeItem(this.ROLE_KEY);
+    }
   }
 
   clear(): void {

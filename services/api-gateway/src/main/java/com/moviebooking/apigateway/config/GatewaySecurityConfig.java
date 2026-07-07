@@ -5,6 +5,11 @@ import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsWebFilter;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Component
 public class GatewaySecurityConfig {
@@ -25,19 +30,20 @@ public class GatewaySecurityConfig {
     }
 
     @Bean
-    public GatewayFilter corsFilter() {
-        return (exchange, chain) -> {
-            ServerWebExchange mutatedExchange = exchange.mutate()
-                .request(builder -> builder.headers(headers -> {
-                    headers.add(GatewayConstants.HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, GatewayConstants.CORS_ALLOWED_ORIGIN);
-                    headers.add(GatewayConstants.HEADER_ACCESS_CONTROL_ALLOW_METHODS, GatewayConstants.CORS_ALLOWED_METHODS);
-                    headers.add(GatewayConstants.HEADER_ACCESS_CONTROL_ALLOW_HEADERS, GatewayConstants.CORS_ALLOWED_HEADERS);
-                    headers.add(GatewayConstants.HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS, GatewayConstants.CORS_ALLOW_CREDENTIALS);
-                    headers.add(GatewayConstants.HEADER_ACCESS_CONTROL_EXPOSE_HEADERS, GatewayConstants.CORS_EXPOSE_HEADERS);
-                    headers.add(GatewayConstants.HEADER_ACCESS_CONTROL_MAX_AGE, GatewayConstants.CORS_MAX_AGE);
-                }))
-                .build();
-            return chain.filter(mutatedExchange);
-        };
+    public CorsWebFilter corsWebFilter() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOriginPatterns(List.of("http://localhost:*", "http://127.0.0.1:*"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setExposedHeaders(List.of(
+            GatewayConstants.HEADER_CORRELATION_ID,
+            GatewayConstants.HEADER_X_RESPONSE_TIME_MS
+        ));
+        configuration.setAllowCredentials(false);
+        configuration.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return new CorsWebFilter(source);
     }
 }

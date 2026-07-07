@@ -24,5 +24,6 @@ export interface AuthResponse {
   accessToken: string;
   refreshToken: string;
   userId: string;
+  tokenType: string;
   role: string;
 }
