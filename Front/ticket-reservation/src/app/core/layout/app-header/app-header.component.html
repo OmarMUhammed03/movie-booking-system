@@ -7,6 +7,12 @@
     <nav class="flex items-center gap-2 sm:gap-3">
       @if (isLoggedIn()) {
         <a
+          routerLink="/profile"
+          routerLinkActive="bg-amber-400/15 text-amber-400"
+          class="rounded-lg px-3 py-2 text-sm font-medium text-neutral-300 transition-colors hover:text-white"
+        >profile</a>
+        
+        <a
           routerLink="/reservations"
           routerLinkActive="bg-amber-400/15 text-amber-400"
           class="rounded-lg px-3 py-2 text-sm font-medium text-neutral-300 transition-colors hover:text-white"

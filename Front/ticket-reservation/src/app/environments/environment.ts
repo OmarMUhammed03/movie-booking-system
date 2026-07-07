@@ -9,6 +9,7 @@ export const environment = {
   showUrl: '/api',
   movieUrl: '/api',
   paymentUrl: '/api/payments',
+  
   aiUrl: '/api/ai',
   userUrl: '/api',
 };
