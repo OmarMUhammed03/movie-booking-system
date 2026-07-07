@@ -28,5 +28,13 @@ export const routes: Routes = [
       import('./feature/reservations/reservations-list/reservations-list.component').then(
         (m) => m.ReservationsListComponent
       )
+  },
+  {
+    path: 'shows/:showId/seats',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./feature/seat-selection/seat-selection.component').then(
+        (m) => m.SeatSelectionComponent
+      )
   }
 ];
