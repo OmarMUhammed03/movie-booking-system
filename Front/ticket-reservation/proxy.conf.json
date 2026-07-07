@@ -18,5 +18,15 @@
     "target": "http://localhost:8082",
     "secure": false,
     "changeOrigin": true
+  },
+  "/api/ai": {
+    "target": "http://localhost:8086",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/auth": {
+    "target": "http://localhost:8081",
+    "secure": false,
+    "changeOrigin": true
   }
 }
