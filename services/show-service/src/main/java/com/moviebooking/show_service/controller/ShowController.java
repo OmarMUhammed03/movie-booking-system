@@ -25,6 +25,7 @@ public class ShowController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
+    @CrossOrigin(origins = "http://localhost:4200")
     @Operation(summary = "Create a new show", description = "Schedules a new show for a movie in a hall. Restricted to administrators.")
     public ResponseEntity<ShowResponse> createShow(@Valid @RequestBody ShowRequest request) {
         ShowResponse response = showService.createShow(request);

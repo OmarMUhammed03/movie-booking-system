@@ -1,5 +1,6 @@
 package com.moviebooking.auth_service.service.impl;
 
+import com.moviebooking.auth_service.model.AuthUser;
 import com.moviebooking.auth_service.model.TokenType;
 import com.moviebooking.auth_service.service.JWTService;
 import io.jsonwebtoken.Claims;
@@ -55,10 +56,12 @@ public class JWTServiceImpl implements JWTService {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
         var now = System.currentTimeMillis();
+        AuthUser authUser = (AuthUser) userDetails;
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .claim("roles", roles)
                 .claim("type", type)
+                .claim("userId", authUser.getId().toString())
                 .setIssuedAt(new Date(now))
                 .setExpiration(new Date(now + expiration))
                 .signWith(privateKey, SignatureAlgorithm.RS256)

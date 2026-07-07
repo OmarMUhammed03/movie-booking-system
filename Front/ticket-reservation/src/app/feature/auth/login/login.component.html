@@ -1,0 +1,64 @@
+<div class="min-h-screen grid lg:grid-cols-2 bg-[#09090f] text-white">
+  <div
+    class="hidden lg:flex relative p-10 bg-cover bg-center"
+    style="background-image:url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1600&auto=format&fit=crop')"
+  >
+    <div class="absolute inset-0 bg-black/60"></div>
+
+    <div class="relative z-10 mt-auto max-w-xl">
+      <h2 class="text-5xl font-bold mb-4">
+        “Every seat is a portal to somewhere new.”
+      </h2>
+      <p class="text-gray-300">
+        Book blockbusters, indie premieres and midnight screenings — all in one place.
+      </p>
+    </div>
+  </div>
+
+  <div class="flex items-center justify-center p-6">
+    <form
+      [formGroup]="form"
+      (ngSubmit)="submit()"
+      class="w-full max-w-md space-y-4"
+    >
+      <h1 class="text-4xl font-bold">Welcome back</h1>
+      <p class="text-gray-400">Sign in to continue booking your seats.</p>
+
+      <div>
+        <label for="email" class="block text-xs font-medium tracking-wide text-gray-400 mb-1.5">EMAIL</label>
+        <input
+          id="email"
+          class="w-full rounded-xl border border-white/10 bg-[#10131c] p-4"
+          placeholder="you@cinebook.io"
+          formControlName="email"
+        />
+      </div>
+
+      <div>
+        <label for="password" class="block text-xs font-medium tracking-wide text-gray-400 mb-1.5">PASSWORD</label>
+        <input
+          id="password"
+          type="password"
+          class="w-full rounded-xl border border-white/10 bg-[#10131c] p-4"
+          placeholder="Password"
+          formControlName="password"
+        />
+      </div>
+
+      <div *ngIf="error()" class="text-red-400">
+        {{ error() }}
+      </div>
+
+      <button class="w-full rounded-xl bg-amber-400 text-black p-4 font-semibold">
+        Sign in
+      </button>
+
+      <app-google-button (credential)="onGoogleCredential($event)" (googleError)="onGoogleError($event)" />
+
+      <p class="text-center text-gray-400">
+        New here?
+        <a routerLink="/register" class="text-amber-400">Create an account</a>
+      </p>
+    </form>
+  </div>
+</div>

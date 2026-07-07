@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-
 public class JWTAuthProvider implements AuthenticationProvider {
 
     private final JWTService jwtService;
@@ -28,13 +27,14 @@ public class JWTAuthProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String token = (String) authentication.getCredentials();
         String email = jwtService.getUsernameFromToken(token);
+        String userId = jwtService.getUserIdFromToken(token);
 
         List<GrantedAuthority> roles = jwtService.getAuthorities(token);
         List<SimpleGrantedAuthority> authorities = roles.stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role)) // Add ROLE_ prefix
                 .toList();
 
-        return new JWTAuthToken(token, email, authorities);
+        return new JWTAuthToken(token, email, userId, authorities);
     }
 
     @Override
