@@ -1,15 +1,15 @@
 services:
 
-  angular-frontend:
-    build:
-      context: ./Front/ticket-reservation  # Path to your Angular project folder
-      dockerfile: Dockerfile
-    container_name: angular-frontend
-    restart: unless-stopped
-    ports:
-      - "3000:80"          # Access the app at http://localhost:4200
-    networks:
-      - movie-network
+#  angular-frontend:
+#    build:
+#      context: ./Front/ticket-reservation  # Path to your Angular project folder
+#      dockerfile: Dockerfile
+#    container_name: angular-frontend
+#    restart: unless-stopped
+#    ports:
+#      - "3000:80"          # Access the app at http://localhost:4200
+#    networks:
+#      - movie-network
     # Optional: ensure it only starts after the gateway is up (if uncommented)
     # depends_on:
     #   - api-gateway

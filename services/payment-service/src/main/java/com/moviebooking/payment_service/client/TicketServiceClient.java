@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.UUID;
 
-@FeignClient(name = "show-service", contextId = "ticketServiceClient", path = "/api/tickets")
+@FeignClient(name = "show-service", contextId = "ticketServiceClient", path = "/api/shows/tickets")
 public interface TicketServiceClient {
 
     @GetMapping("/{id}")

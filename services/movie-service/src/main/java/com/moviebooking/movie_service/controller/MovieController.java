@@ -23,14 +23,14 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/movies")
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
 @Tag(name = "Movie Controller", description = "APIs for managing movie catalog records")
 public class MovieController {
 
     private final MovieService movieService;
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @Operation(summary = "Create a new movie", description = "Adds a new movie to the catalog system. Restricted to administrators.")
     public ResponseEntity<MovieResponse> createMovie(@Valid @RequestBody MovieRequest request) {
@@ -51,7 +51,7 @@ public class MovieController {
         return ResponseEntity.ok(movieService.getAllMovies(pageable));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     @Operation(summary = "Update an existing movie", description = "Updates the fields of an existing movie record found by its UUID.")
     public ResponseEntity<MovieResponse> updateMovie(
@@ -60,7 +60,7 @@ public class MovieController {
         return ResponseEntity.ok(movieService.updateMovie(id, request));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a movie record", description = "Permanently removes a movie from the database configuration using its ID.")
     public ResponseEntity<Void> deleteMovie(@PathVariable UUID id) {

@@ -23,9 +23,8 @@ public class ShowController {
 
     private final ShowService showService;
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    @CrossOrigin(origins = "http://localhost:4200")
     @Operation(summary = "Create a new show", description = "Schedules a new show for a movie in a hall. Restricted to administrators.")
     public ResponseEntity<ShowResponse> createShow(@Valid @RequestBody ShowRequest request) {
         ShowResponse response = showService.createShow(request);
@@ -45,7 +44,7 @@ public class ShowController {
         return ResponseEntity.ok(showService.getAllShows());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     @Operation(summary = "Update an existing show", description = "Updates the fields of an existing show record found by its UUID.")
     public ResponseEntity<ShowResponse> updateShow(
@@ -54,7 +53,7 @@ public class ShowController {
         return ResponseEntity.ok(showService.updateShow(id, request));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a show record", description = "Permanently removes a show from the database using its ID.")
     public ResponseEntity<Void> deleteShow(@PathVariable UUID id) {

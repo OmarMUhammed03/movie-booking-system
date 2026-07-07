@@ -23,7 +23,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 @Tag(name = "User Controller", description = "Endpoints for managing user profiles")
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
     private final UserService userService;
@@ -57,13 +57,12 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    @GetMapping("/auth/{authUserId}")
     @Operation(summary = "Get user by Auth User ID", description = "Retrieves a user profile by its corresponding Auth service user ID")
     @ApiResponse(responseCode = "200", description = "User found")
     @ApiResponse(responseCode = "404", description = "User not found")
-    @GetMapping("/auth/{authUserId}")
     public ResponseEntity<UserDto> getUserByAuthUserId(
-            @Parameter(description = "Auth User ID of the user to be retrieved")
-            @PathVariable("authUserId") UUID authUserId) {
+            @Parameter(description = "Auth User ID of the user to be retrieved") @PathVariable("authUserId") UUID authUserId) {
         log.info("Fetching user by authUserId: {}", authUserId);
         UserDto user = userService.getUserByAuthUserId(authUserId);
         log.info("Found user with authUserId: {}", authUserId);
@@ -88,7 +87,7 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "User patched successfully")
     @ApiResponse(responseCode = "404", description = "User not found")
     public ResponseEntity<UserDto> patchUser(
-            @Parameter(description = "ID of the user to be patched") @PathVariable UUID id,
+            @Parameter(description = "ID of the user to be patched") @PathVariable("id") UUID id,
             @RequestBody UserPatchDto patchDto) {
         log.info("Patching user with id: {}", id);
         UserDto patchedUser = userService.patchUser(id, patchDto);
@@ -101,7 +100,7 @@ public class UserController {
     @ApiResponse(responseCode = "204", description = "User deleted successfully")
     @ApiResponse(responseCode = "404", description = "User not found")
     public ResponseEntity<Void> deleteUser(
-            @Parameter(description = "ID of the user to be deleted") @PathVariable UUID id) {
+            @Parameter(description = "ID of the user to be deleted") @PathVariable("id") UUID id) {
         log.info("Deleting user with id: {}", id);
         userService.deleteUser(id);
         log.info("Successfully deleted user with id: {}", id);
