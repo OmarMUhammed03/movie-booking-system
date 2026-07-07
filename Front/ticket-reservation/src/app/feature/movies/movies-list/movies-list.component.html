@@ -1,0 +1,94 @@
+<div class="min-h-screen bg-[#09090f] text-white">
+  <section
+    class="relative overflow-hidden border-b border-white/5 bg-cover bg-center px-6 py-16 md:px-10 md:py-20"
+    style="background-image: url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1600&auto=format&fit=crop')"
+  >
+    <div class="absolute inset-0 bg-black/70"></div>
+
+    <div class="relative z-10 mx-auto max-w-6xl">
+      <span class="mb-4 inline-block rounded-full border border-amber-400/40 bg-amber-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-amber-400">
+        Now showing
+      </span>
+
+      <h1 class="mb-3 text-4xl font-bold leading-tight md:text-5xl">
+        Book tonight's <span class="text-amber-400">big screen.</span>
+      </h1>
+      <p class="mb-8 max-w-2xl text-neutral-300">
+        Discover the latest blockbusters, choose your seats, and grab your ticket in under a minute.
+      </p>
+
+      <div class="flex max-w-3xl overflow-hidden rounded-2xl border border-white/10 bg-[#10131c]/90 backdrop-blur">
+        <div class="flex flex-1 items-center gap-3 px-4">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-5 w-5 shrink-0 text-neutral-400">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
+          <input
+            type="search"
+            placeholder="Search by title, genre..."
+            class="w-full bg-transparent py-4 text-white placeholder:text-neutral-500 focus:outline-none"
+            [value]="searchQuery()"
+            (input)="onSearchInput($event)"
+          />
+        </div>
+        <button
+          type="button"
+          class="bg-amber-400 px-6 py-4 font-semibold text-black transition-colors hover:bg-amber-300"
+        >
+          Search
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-6 py-10 md:px-10">
+    <div class="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <h2 class="text-2xl font-bold">
+        All Movies
+        @if (resource.hasValue()) {
+          <span class="text-neutral-400">({{ filteredMovies().length }})</span>
+        }
+      </h2>
+
+      @if (resource.hasValue()) {
+        <div class="flex flex-wrap gap-2">
+          @for (genre of availableGenres(); track genre) {
+            <button
+              type="button"
+              (click)="selectGenre(genre)"
+              [class]="
+                selectedGenre() === genre
+                  ? 'rounded-full bg-amber-400 px-4 py-2 text-sm font-medium text-black'
+                  : 'rounded-full border border-white/10 bg-neutral-900 px-4 py-2 text-sm font-medium text-neutral-300 hover:border-amber-400/40 hover:text-white'
+              "
+            >
+              {{ genre }}
+            </button>
+          }
+        </div>
+      }
+    </div>
+
+    @if (resource.isLoading()) {
+      <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        @for (i of [1, 2, 3, 4]; track i) {
+          <div class="aspect-[2/3] animate-pulse rounded-2xl bg-neutral-800"></div>
+        }
+      </div>
+    } @else if (resource.error()) {
+      <div class="rounded-2xl border border-red-500/20 bg-red-500/10 p-6 text-red-300">
+        Failed to load movies. Make sure movie-service is running and you are signed in.
+      </div>
+    } @else if (filteredMovies().length === 0) {
+      <div class="rounded-2xl border border-white/10 bg-neutral-900/60 py-16 text-center text-neutral-400">
+        No movies match your search.
+      </div>
+    } @else {
+      <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        @for (movie of filteredMovies(); track movie.id) {
+          <app-movie-card [movie]="movie" />
+        }
+      </div>
+    }
+  </section>
+</div>
