@@ -39,8 +39,12 @@ public class TicketController {
     }
 
     @GetMapping
-    @Operation(summary = "Get all tickets", description = "Fetches a comprehensive list of all tickets available in the database.")
-    public ResponseEntity<List<TicketResponse>> getAllTickets() {
+    @Operation(summary = "Get all tickets", description = "Fetches tickets available in the database, optionally filtered by show.")
+    public ResponseEntity<List<TicketResponse>> getAllTickets(
+            @RequestParam(required = false) UUID showId) {
+        if (showId != null) {
+            return ResponseEntity.ok(ticketService.getTicketsByShowId(showId));
+        }
         return ResponseEntity.ok(ticketService.getAllTickets());
     }
 

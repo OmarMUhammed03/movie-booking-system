@@ -48,6 +48,14 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
+    public List<TicketResponse> getTicketsByShowId(UUID showId) {
+        return ticketRepository.findTicketsByShowId(showId)
+                .stream()
+                .map(ticketMapper::toResponse)
+                .toList();
+    }
+
+    @Override
     @Transactional
     public TicketResponse updateTicket(UUID id, TicketRequest request) {
         Ticket ticket = ticketRepository.findById(id)
