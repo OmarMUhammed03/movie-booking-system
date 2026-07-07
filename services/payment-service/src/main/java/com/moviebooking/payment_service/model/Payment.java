@@ -3,7 +3,10 @@ package com.moviebooking.payment_service.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -21,6 +24,18 @@ public class Payment {
 
     @Column(nullable = false, unique = true)
     private UUID reservationId;
+
+    private UUID userId;
+
+    private UUID showId;
+
+    @ElementCollection
+    @CollectionTable(name = "payment_ticket_ids", joinColumns = @JoinColumn(name = "payment_id"))
+    @Column(name = "ticket_id")
+    @Builder.Default
+    private List<UUID> ticketIds = new ArrayList<>();
+
+    private BigDecimal totalPrice;
 
     @Column(unique = true)
     private String stripeSessionId;

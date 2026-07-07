@@ -16,6 +16,12 @@ export interface BackendReservationResponse {
   ticketIds: string[];
 }
 
+export interface ReservationCreateRequest {
+  userId: string;
+  showId: string;
+  ticketIds: string[];
+}
+
 interface ShowResponse {
   id: string;
   movieId: string;
@@ -116,4 +122,13 @@ export class ReservationService {
       return Promise.all(summaryPromises);
     }
   });
+
+  // Creates a reservation for one or more seats. The reservation-service persists
+  // it as PENDING and publishes a ReservationSagaEvent (reservation.created) that
+  // drives the show/payment services to reserve tickets and confirm/cancel it.
+  createReservation(request: ReservationCreateRequest): Promise<BackendReservationResponse> {
+    return firstValueFrom(
+      this.http.post<BackendReservationResponse>(environment.reservationUrl, request)
+    );
+  }
 }

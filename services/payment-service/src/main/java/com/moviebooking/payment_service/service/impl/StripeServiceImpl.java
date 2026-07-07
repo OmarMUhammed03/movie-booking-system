@@ -1,6 +1,7 @@
 package com.moviebooking.payment_service.service.impl;
 
 import com.moviebooking.payment_service.config.StripeProperties;
+import com.moviebooking.payment_service.dto.StripeCheckoutLineItem;
 import com.moviebooking.payment_service.exception.PaymentProcessingException;
 import com.moviebooking.payment_service.exception.StripeWebhookException;
 import com.moviebooking.payment_service.service.StripeService;
@@ -12,6 +13,7 @@ import com.stripe.net.Webhook;
 import com.stripe.param.checkout.SessionCreateParams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Map;
 
@@ -22,7 +24,16 @@ public class StripeServiceImpl implements StripeService {
     private final StripeProperties stripeProperties;
 
     @Override
-    public Session createCheckoutSession(long amountCents, String currency, Map<String, String> metadata) {
+    public Session createCheckoutSession(StripeCheckoutLineItem lineItem, Map<String, String> metadata) {
+        SessionCreateParams.LineItem.PriceData.ProductData.Builder productBuilder =
+                SessionCreateParams.LineItem.PriceData.ProductData.builder()
+                        .setName(lineItem.productName())
+                        .setDescription(lineItem.description());
+
+        if (StringUtils.hasText(lineItem.posterUrl()) && lineItem.posterUrl().startsWith("https://")) {
+            productBuilder.addImage(lineItem.posterUrl());
+        }
+
         SessionCreateParams.Builder paramsBuilder = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
                 .setSuccessUrl(stripeProperties.getSuccessUrl())
@@ -32,13 +43,9 @@ public class StripeServiceImpl implements StripeService {
                                 .setQuantity(1L)
                                 .setPriceData(
                                         SessionCreateParams.LineItem.PriceData.builder()
-                                                .setCurrency(currency)
-                                                .setUnitAmount(amountCents)
-                                                .setProductData(
-                                                        SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                                                                .setName("Movie Ticket")
-                                                                .build()
-                                                )
+                                                .setCurrency(lineItem.currency())
+                                                .setUnitAmount(lineItem.amountCents())
+                                                .setProductData(productBuilder.build())
                                                 .build()
                                 )
                                 .build()
