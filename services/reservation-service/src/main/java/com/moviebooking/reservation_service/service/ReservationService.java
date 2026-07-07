@@ -1,17 +1,17 @@
 package com.moviebooking.reservation_service.service;
 
-import com.moviebooking.reservation_service.config.RabbitMQConfig;
 import com.moviebooking.reservation_service.dto.ReservationRequest;
 import com.moviebooking.reservation_service.dto.ReservationResponse;
 import com.moviebooking.reservation_service.exception.ReservationNotFoundException;
 import com.moviebooking.reservation_service.mapper.ReservationMapper;
+import com.moviebooking.reservation_service.messaging.ReservationCreatedEvent;
 import com.moviebooking.reservation_service.model.Reservation;
 import com.moviebooking.reservation_service.model.ReservationTicket;
 import com.moviebooking.reservation_service.repository.ReservationRepository;
 import com.moviebooking.reservation_service.repository.ReservationTicketRepository;
 import com.moviebooking.shared.event.ReservationSagaEvent;
 import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +27,7 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final ReservationTicketRepository reservationTicketRepository;
     private final ReservationMapper reservationMapper;
-    private final RabbitTemplate rabbitTemplate;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public ReservationResponse createReservation(ReservationRequest request) {
@@ -58,11 +58,7 @@ public class ReservationService {
                 .ticketIds(request.getTicketIds())
                 .build();
 
-        rabbitTemplate.convertAndSend(
-                RabbitMQConfig.RESERVATION_EXCHANGE,
-                RabbitMQConfig.ROUTING_KEY_RESERVATION_CREATED,
-                event
-        );
+        eventPublisher.publishEvent(new ReservationCreatedEvent(event));
 
         return reservationMapper.toResponse(saved);
     }

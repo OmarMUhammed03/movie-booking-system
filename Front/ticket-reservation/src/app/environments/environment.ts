@@ -8,6 +8,7 @@ export const environment = {
   reservationUrl: '/api/reservations',
   showUrl: '/api',
   movieUrl: '/api',
+  paymentUrl: '/api/payments',
   aiUrl: '/api/ai',
   userUrl: '/api',
 };

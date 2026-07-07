@@ -2,6 +2,7 @@ import { DatePipe, DecimalPipe, Location } from '@angular/common';
 import { Component, computed, inject, resource, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { PaymentService } from '../../core/services/payment.service';
 import { ReservationService } from '../../core/services/reservation.service';
 import { ShowService } from '../../core/services/show.service';
 import { HallDetails, MovieDetails, ShowDetails, TicketInfo } from '../../core/models/show.model';
@@ -37,6 +38,7 @@ export class SeatSelectionComponent {
   private location = inject(Location);
   private showService = inject(ShowService);
   private reservationService = inject(ReservationService);
+  private paymentService = inject(PaymentService);
   private authService = inject(AuthService);
 
   showId = this.route.snapshot.paramMap.get('showId') ?? '';
@@ -151,14 +153,28 @@ export class SeatSelectionComponent {
     this.submitError.set(null);
 
     try {
-      await this.reservationService.createReservation({
+      const reservation = await this.reservationService.createReservation({
         userId,
         showId: this.showId,
         ticketIds: tickets.map((t) => t.id)
       });
-      await this.router.navigate(['/reservations']);
+
+      const readyReservation = await this.reservationService.waitForSagaReady(
+        reservation.id,
+        this.total()
+      );
+
+      const checkout = await this.paymentService.createCheckoutSession({
+        reservationId: readyReservation.id,
+        userId,
+        showId: this.showId,
+        ticketIds: tickets.map((t) => t.id),
+        totalPrice: readyReservation.totalPrice
+      });
+
+      window.location.href = checkout.checkoutUrl;
     } catch {
-      this.submitError.set('Could not create the reservation. Please try again.');
+      this.submitError.set('Could not complete the reservation. Please try again.');
     } finally {
       this.submitting.set(false);
     }
