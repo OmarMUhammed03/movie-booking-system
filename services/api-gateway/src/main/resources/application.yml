@@ -59,6 +59,16 @@ spring:
                 redis-rate-limiter: "#{@redisRateLimiter}"
                 key-resolver: "#{@ipKeyResolver}"
 
+        - id: ticket-service
+          uri: lb://show-service
+          predicates:
+            - Path=/api/tickets/**,/api/halls/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter: "#{@redisRateLimiter}"
+                key-resolver: "#{@ipKeyResolver}"
+
         - id: reservation-service
           uri: lb://reservation-service
           predicates:

@@ -11,6 +11,7 @@ public interface TicketService {
     TicketResponse createTicket(TicketRequest request);
     TicketResponse getTicketById(UUID id);
     List<TicketResponse> getAllTickets();
+    List<TicketResponse> getTicketsByShowId(UUID showId);
     TicketResponse updateTicket(UUID id, TicketRequest request);
     void deleteTicket(UUID id);
 
